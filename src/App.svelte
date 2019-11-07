@@ -4,10 +4,19 @@ let ids = [0,1,2,3,4,5]
 
 function dragStart(e) {
 	e.dataTransfer.setData("text", e.target.id)
+	console.log("Start draggin...")
 }
 
-function dragEnd(e) {
-	console.log(e.dataTransfer.getData("text"))
+function drop(e) {
+	e.preventDefault();
+	let data = e.dataTransfer.getData("text")
+	console.log(data)
+	console.log(e)
+	e.target.appendChild(document.getElementById(data))
+}
+
+function dragOver(e) {
+	e.preventDefault();
 }
 
 </script>
@@ -66,13 +75,13 @@ h1 {
 
 	<div class="column">
 		<h2>Container 1</h2>
-		<div class="dropzone">
+		<div class="dropzone" on:dragover={dragOver} on:drop={drop}>
 			{#each ids as id}
-			<div class="item" draggable="true" on:dragstart={dragStart} on:dragend={dragEnd} id={id}>Item {id}</div>
+			<div class="item" draggable="true" on:dragstart={dragStart} on:drop|preventDefault|stopPropagation id={id}>Item {id}</div>
 			{/each}
 		</div>
 	</div>
-	<div class="column">
+	<div class="column" on:dragover={dragOver} on:drop={drop}>
 		<h2>Container 2</h2>
 		<div class="dropzone"></div>
 	</div>
