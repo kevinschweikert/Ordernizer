@@ -1,26 +1,15 @@
+
+
 <script>
+import Item from './Item.svelte'
 
-let ids = [0,1,2,3,4,5]
 
-function dragStart(e) {
-	e.dataTransfer.setData("text", e.target.id)
-	console.log("Start draggin...")
-
-	setTimeout(() => {
-		e.target.style.display = "none"
-	}, 0)
-}
-
-function dragEnd(e) {
-	e.target.style.display = "block"
-}
+let ids = [0,1,2]
 
 function drop(e) {
 	e.preventDefault();
 	let data = e.dataTransfer.getData("text")
-	console.log(data)
-	console.log(e)
-	let item = document.getElementById(data)
+	let item = document.getElementById("collapsed")
 	e.target.appendChild(item)
 	item.style.display = "block"
 }
@@ -38,30 +27,36 @@ function dragOver(e) {
 	flex-direction: column;
 	justify-items: center;
 	align-items: center;
-	background-color: black;
-	font-family: 'Roboto', 'Montserrat', Arial, sans-serif;
+	font-family: 'Montserrat', Arial, sans-serif;
 	padding: 0;
 	margin: 0;
 	height: 100vh;
 	width: 100vw;
 }
 
-h1 {
-	color: white;
-}
 
 .container {
 	display: flex;
 	flex-direction: row;
+	margin-top: 50px;
 }
 
 .column {
-	background-color: #333333;
+
 	margin: 10px;
 	padding: 20px;
-	color: white;
 	min-width: 350px;
 	min-height: 600px;
+}
+
+.title {
+	font-size: 250%;
+	font-weight: 900;
+	text-align: center;
+	border: 2px solid;
+	border-radius: 10px;
+	margin-bottom: 50px;
+	padding: 20px;
 }
 
 .dropzone {
@@ -69,31 +64,21 @@ h1 {
 	min-height: 200px;
 }
 
-.item {
-	background-color: #888888;
-	margin: 20px;
-	padding: 20px;
-	cursor: pointer;
-	user-select: none;
-}
+
 
 </style>
 
 <div class="app">
-<h1>DnD Test</h1>
 <div class="container">
 
 	<div class="column">
-		<h2>Container 1</h2>
+		<div class="title">ANGEBOT ANFRAGEN</div>
 		<div class="dropzone" on:dragover={dragOver} on:drop={drop}>
 			{#each ids as id}
-			<div class="item" draggable="true" on:dragstart={dragStart} on:drop|preventDefault|stopPropagation on:dragend={dragEnd} id={id}>Item {id}</div>
+				<Item id={id}></Item>
 			{/each}
 		</div>
 	</div>
-	<div class="column" >
-		<h2>Container 2</h2>
-		<div class="dropzone" on:dragover={dragOver} on:drop={drop}></div>
-	</div>
+
 </div>
 </div>
