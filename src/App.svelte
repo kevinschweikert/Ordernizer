@@ -1,22 +1,64 @@
-
-
 <script>
-import Item from './Item.svelte'
+import Item from './Item.svelte';
+import {onMount} from 'svelte';
+
+let columns = [
+	{name: "Angebote anfragen", state: "angebot", items: []},
+	{name: "BA erstellen", state: "beschaffungsantrag", items: []},
+	{name: "An Verwaltung", state: "verwaltung", items: []},
+]
+
+let items = [
+	{name:"Test 1", pNumber: "201911_02", desc: "Llorem ipsum", state: "angebot"},
+	{name:"Test 3", pNumber: "201911_04", desc: "Llorem ipsum", state: "angebot"},
+	{name:"Test 2", pNumber: "201911_04", desc: "Llorem ipsum", state: "beschaffungsantrag"},
+]
 
 
-let ids = [0,1,2]
+columns.forEach((column) => {
+	items.forEach((item) => {
+		if (item.state == column.state) {
+			column.items.push(item)
+		}
+	})
+})
+
+
 
 function drop(e) {
 	e.preventDefault();
+
+	//order neu stezen
+	//  splice    ....     insert
+
+	//oder sortieren
+	// ids.sort( (a,b)=>{
+	// 	if(a.order > b.order){
+	// 		return -1;
+	// 	}else if (a.order < b.order){
+	// 		return 1;
+
+	// 	}else {
+	// 		return 0;
+	// 	}
+	// });
+
+
 	let data = e.dataTransfer.getData("text")
-	let item = document.getElementById("collapsed")
-	e.target.appendChild(item)
-	item.style.display = "block"
+	let item = document.querySelectorAll("[data-id='" + data + "']")
+	try {
+		e.target.appendChild(item[0])
+	}
+	catch(e) {
+		console.warn(e)
+	}
+	document.get
 }
 
 function dragOver(e) {
 	e.preventDefault();
 }
+
 
 </script>
 
@@ -25,8 +67,8 @@ function dragOver(e) {
 .app {
 	display: flex;
 	flex-direction: column;
-	justify-items: center;
-	align-items: center;
+	justify-items: left;
+	align-items: left;
 	font-family: 'Montserrat', Arial, sans-serif;
 	padding: 0;
 	margin: 0;
@@ -39,6 +81,7 @@ function dragOver(e) {
 	display: flex;
 	flex-direction: row;
 	margin-top: 50px;
+	width: 300px;
 }
 
 .column {
@@ -57,11 +100,14 @@ function dragOver(e) {
 	border-radius: 10px;
 	margin-bottom: 50px;
 	padding: 20px;
+	height: 100px;
 }
 
 .dropzone {
 	border: 2px dashed;
+	border-radius: 10px;
 	min-height: 200px;
+	padding-bottom: 50px;
 }
 
 
@@ -70,15 +116,15 @@ function dragOver(e) {
 
 <div class="app">
 <div class="container">
-
+	{#each columns as column}
 	<div class="column">
-		<div class="title">ANGEBOT ANFRAGEN</div>
+		<div class="title">{column.name}</div>
 		<div class="dropzone" on:dragover={dragOver} on:drop={drop}>
-			{#each ids as id}
-				<Item id={id}></Item>
+			{#each column.items as item}
+				<Item title={item.name} projectNumber={item.pNumber} description={item.desc} />
 			{/each}
 		</div>
 	</div>
-
+	{/each}
 </div>
 </div>

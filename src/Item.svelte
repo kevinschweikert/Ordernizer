@@ -1,20 +1,8 @@
 <script>
 
-export let id = nil;
-
-let list_items = ["1x Sony Alpha 6500", "2x Sachtler Stativ", "3x BNC Kabel"]
-
-function dragStart(e) {
-e.dataTransfer.setData("text", e.target.id)
-setTimeout(() => {
-    e.target.id = "collapsed"
-}, 0)
-}
-
-
-function dragEnd(e) {
-    e.target.id = ""
-}
+export let title = "";
+export let projectNumber = "";
+export let description = "";
 
 </script>
 
@@ -67,17 +55,10 @@ li {
 <div 
     class="item" 
     draggable="true" 
-    on:dragstart={dragStart} 
-    on:drop|preventDefault|stopPropagation 
-    on:dragend={dragEnd} 
-    id={id}>
-    <h3> CASE CUBE.X {id}</h3>
-    <span>NR: 201911_02</span>
+    on:drop|preventDefault|stopPropagation>
+    <h3> {title} </h3>
+    <span>NR: {projectNumber}</span>
     <div class="desription">
-       <ul>
-        {#each list_items as li}
-            <li>{li}</li>
-        {/each}
-       </ul> 
+        {description}
     </div>
 </div>
