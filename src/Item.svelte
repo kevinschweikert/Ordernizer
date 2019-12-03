@@ -1,8 +1,50 @@
+
+
 <script>
+
+
 
 export let title = "";
 export let projectNumber = "";
 export let description = "";
+
+/* let top = false
+let bottom = false
+
+function dragEnter() {
+
+}
+
+function dragOver(e) {
+
+    const height = e.target.clientHeight
+    const y = e.offsetY
+    const ratio = height/y
+    
+	if (ratio <= 0.5) {
+        top = true
+        bottom = false
+    }
+    else if (ratio > 0.5) {
+        top = false
+        bottom = true
+    }
+    else {
+        top = false
+        bottom = false
+    }
+}
+
+function dragLeave() {
+    top = false
+    bottom = false
+}
+
+function dragEnd() {
+    top = false
+    bottom = false
+} */
+
 
 </script>
 
@@ -21,17 +63,9 @@ export let description = "";
     box-shadow: 4px 4px 20px rgba(0,0,0,0.2);
     border-radius: 10px;
     font-size: 150%;
-    height: 200px;
     overflow: hidden;
     transition: all 0.5s;
     opacity: 100%;
-}
-
-#collapsed {
-    height: 0px;
-    padding: 0;
-    margin: 0;
-    opacity: 0;
 }
 
 span {
@@ -49,13 +83,11 @@ li {
     line-height: 200%;
 }
 
-
 </style>
 
-<div 
-    class="item" 
-    draggable="true" 
-    on:drop|preventDefault|stopPropagation>
+
+
+<div class="item">
     <h3> {title} </h3>
     <span>NR: {projectNumber}</span>
     <div class="desription">

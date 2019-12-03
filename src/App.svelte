@@ -1,6 +1,8 @@
 <script>
-import Item from './Item.svelte';
 import {onMount} from 'svelte';
+import dragula  from 'dragula';
+import atoa from 'atoa';
+import { flip } from 'svelte/animate';
 
 let columns = [
 	{name: "Angebote anfragen", state: "angebot", items: []},
@@ -10,10 +12,19 @@ let columns = [
 
 let items = [
 	{name:"Test 1", pNumber: "201911_02", desc: "Llorem ipsum", state: "angebot"},
-	{name:"Test 3", pNumber: "201911_04", desc: "Llorem ipsum", state: "angebot"},
+	{name:"Test 3", pNumber: "201911_03", desc: "Llorem ipsum", state: "angebot"},
 	{name:"Test 2", pNumber: "201911_04", desc: "Llorem ipsum", state: "beschaffungsantrag"},
+	{name:"Test 4", pNumber: "201911_05", desc: "Llorem ipsum", state: "beschaffungsantrag"},
+	{name:"Test 5", pNumber: "201911_06", desc: "Llorem ipsum", state: "beschaffungsantrag"},
+	{name:"Test 6", pNumber: "201911_07", desc: "Llorem ipsum", state: "beschaffungsantrag"},
 ]
 
+var drake = dragula({
+  isContainer: function (el) {
+    return el.classList.contains('dragula-container');
+  },
+  revertOnSpill: true
+});
 
 columns.forEach((column) => {
 	items.forEach((item) => {
@@ -22,42 +33,6 @@ columns.forEach((column) => {
 		}
 	})
 })
-
-
-
-function drop(e) {
-	e.preventDefault();
-
-	//order neu stezen
-	//  splice    ....     insert
-
-	//oder sortieren
-	// ids.sort( (a,b)=>{
-	// 	if(a.order > b.order){
-	// 		return -1;
-	// 	}else if (a.order < b.order){
-	// 		return 1;
-
-	// 	}else {
-	// 		return 0;
-	// 	}
-	// });
-
-
-	let data = e.dataTransfer.getData("text")
-	let item = document.querySelectorAll("[data-id='" + data + "']")
-	try {
-		e.target.appendChild(item[0])
-	}
-	catch(e) {
-		console.warn(e)
-	}
-	document.get
-}
-
-function dragOver(e) {
-	e.preventDefault();
-}
 
 
 </script>
@@ -110,7 +85,27 @@ function dragOver(e) {
 	padding-bottom: 50px;
 }
 
+.dragula-container {
+	border: 1px dashed grey;
+	border-radius: 10px;
+	min-height: 500px;
+}
 
+.item {
+    margin: 20px 20px;
+    padding: 40px;
+    cursor: pointer;
+    user-select: none;
+    box-shadow: 4px 4px 20px rgba(0,0,0,0.2);
+    border-radius: 10px;
+    font-size: 150%;
+    overflow: hidden;
+    transition: all 0.5s;
+}
+
+span {
+    font-size: 80%;
+}
 
 </style>
 
@@ -119,9 +114,15 @@ function dragOver(e) {
 	{#each columns as column}
 	<div class="column">
 		<div class="title">{column.name}</div>
-		<div class="dropzone" on:dragover={dragOver} on:drop={drop}>
-			{#each column.items as item}
-				<Item title={item.name} projectNumber={item.pNumber} description={item.desc} />
+		<div class="dragula-container">
+			{#each column.items as item, i (item.pNumber)}
+				<div class="item" animate:flip>
+					<h3> {item.name} </h3>
+					<span>NR: {item.pNumber}</span>
+					<div class="desription">
+					{item.desc}
+				</div>
+			</div>
 			{/each}
 		</div>
 	</div>
