@@ -1,7 +1,5 @@
 <script>
 import {onMount} from 'svelte';
-import dragula  from 'dragula';
-import atoa from 'atoa';
 import { flip } from 'svelte/animate';
 
 let columns = [
@@ -19,20 +17,50 @@ let items = [
 	{name:"Test 6", pNumber: "201911_07", desc: "Llorem ipsum", state: "beschaffungsantrag"},
 ]
 
-var drake = dragula({
-  isContainer: function (el) {
-    return el.classList.contains('dragula-container');
-  },
-  revertOnSpill: true
-});
 
-columns.forEach((column) => {
-	items.forEach((item) => {
-		if (item.state == column.state) {
-			column.items.push(item)
-		}
+let activeItem = ""
+
+function buildArray () {
+	columns.forEach((column) => {
+		column.items = []
+		items.forEach((item) => {
+			if (item.state == column.state) {
+				column.items.push(item)
+			}
+		})
 	})
-})
+}
+buildArray(items)
+
+function dragStart(pNumber) {
+
+	if (activeItem !== "") {
+		items.push(activeItem)
+	}
+	
+	setTimeout(() => {
+	items = items.filter(item => {
+		if (item.pNumber == pNumber) {
+			activeItem = item
+		}
+		return item.pNumber != pNumber
+	})
+	buildArray()
+	columns = columns
+	}, 1)
+}
+
+function dropItem(state) {
+	activeItem.state = state
+	items.push(activeItem)
+	buildArray()
+	columns = columns
+	activeItem = ""
+}
+
+function dragOverItem() {
+
+}
 
 
 </script>
@@ -78,14 +106,7 @@ columns.forEach((column) => {
 	height: 100px;
 }
 
-.dropzone {
-	border: 2px dashed;
-	border-radius: 10px;
-	min-height: 200px;
-	padding-bottom: 50px;
-}
-
-.dragula-container {
+.drag-container {
 	border: 1px dashed grey;
 	border-radius: 10px;
 	min-height: 500px;
@@ -99,6 +120,7 @@ columns.forEach((column) => {
     box-shadow: 4px 4px 20px rgba(0,0,0,0.2);
     border-radius: 10px;
     font-size: 150%;
+	min-height: 200px;
     overflow: hidden;
     transition: all 0.5s;
 }
@@ -114,9 +136,9 @@ span {
 	{#each columns as column}
 	<div class="column">
 		<div class="title">{column.name}</div>
-		<div class="dragula-container">
+		<div class="drag-container" on:drop={(e) => dropItem(column.state)} on:dragover|preventDefault>
 			{#each column.items as item, i (item.pNumber)}
-				<div class="item" animate:flip>
+				<div class="item" animate:flip="{{duration: 500}}" draggable="true" on:dragstart={() => dragStart(item.pNumber)} on:dragover|preventDefault = {dragOverItem} >
 					<h3> {item.name} </h3>
 					<span>NR: {item.pNumber}</span>
 					<div class="desription">
