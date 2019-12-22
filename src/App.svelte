@@ -1,69 +1,30 @@
 <script>
 import {onMount} from 'svelte';
-import { flip } from 'svelte/animate';
+import Files from './Files.svelte';
+import Column from './Column.svelte'
+
 
 let columns = [
-	{name: "Angebote anfragen", state: "angebot", items: []},
-	{name: "BA erstellen", state: "beschaffungsantrag", items: []},
-	{name: "An Verwaltung", state: "verwaltung", items: []},
+	{name: "Angebote anfragen", state: "angebot"},
+	{name: "BA erstellen", state: "beschaffungsantrag"},
+	{name: "An Verwaltung", state: "verwaltung"},
+	{name: "Fertig", state: "fertig"},
 ]
-
-let items = [
-	{name:"Test 1", pNumber: "201911_02", desc: "Llorem ipsum", state: "angebot"},
-	{name:"Test 3", pNumber: "201911_03", desc: "Llorem ipsum", state: "angebot"},
-	{name:"Test 2", pNumber: "201911_04", desc: "Llorem ipsum", state: "beschaffungsantrag"},
-	{name:"Test 4", pNumber: "201911_05", desc: "Llorem ipsum", state: "beschaffungsantrag"},
-	{name:"Test 5", pNumber: "201911_06", desc: "Llorem ipsum", state: "beschaffungsantrag"},
-	{name:"Test 6", pNumber: "201911_07", desc: "Llorem ipsum", state: "beschaffungsantrag"},
-]
-
-
-let activeItem = ""
-
-function buildArray () {
-	columns.forEach((column) => {
-		column.items = []
-		items.forEach((item) => {
-			if (item.state == column.state) {
-				column.items.push(item)
-			}
-		})
-	})
-}
-buildArray(items)
-
-function dragStart(pNumber) {
-
-	if (activeItem !== "") {
-		items.push(activeItem)
-	}
-	
-	setTimeout(() => {
-	items = items.filter(item => {
-		if (item.pNumber == pNumber) {
-			activeItem = item
-		}
-		return item.pNumber != pNumber
-	})
-	buildArray()
-	columns = columns
-	}, 1)
-}
-
-function dropItem(state) {
-	activeItem.state = state
-	items.push(activeItem)
-	buildArray()
-	columns = columns
-	activeItem = ""
-}
-
-function dragOverItem() {
-
-}
-
 
 </script>
+
+
+<Files/>
+
+
+<div class="app">
+<div class="container">
+	{#each columns as column}
+		<Column {...column}/>
+	{/each}
+</div>
+</div>
+
 
 <style>
 
@@ -87,67 +48,4 @@ function dragOverItem() {
 	width: 300px;
 }
 
-.column {
-
-	margin: 10px;
-	padding: 20px;
-	min-width: 350px;
-	min-height: 600px;
-}
-
-.title {
-	font-size: 250%;
-	font-weight: 900;
-	text-align: center;
-	border: 2px solid;
-	border-radius: 10px;
-	margin-bottom: 50px;
-	padding: 20px;
-	height: 100px;
-}
-
-.drag-container {
-	border: 1px dashed grey;
-	border-radius: 10px;
-	min-height: 500px;
-}
-
-.item {
-    margin: 20px 20px;
-    padding: 40px;
-    cursor: pointer;
-    user-select: none;
-    box-shadow: 4px 4px 20px rgba(0,0,0,0.2);
-    border-radius: 10px;
-    font-size: 150%;
-	min-height: 200px;
-    overflow: hidden;
-    transition: all 0.5s;
-}
-
-span {
-    font-size: 80%;
-}
-
 </style>
-
-<div class="app">
-<div class="container">
-	{#each columns as column}
-	<div class="column">
-		<div class="title">{column.name}</div>
-		<div class="drag-container" on:drop={(e) => dropItem(column.state)} on:dragover|preventDefault>
-			{#each column.items as item, i (item.pNumber)}
-				<div class="item" animate:flip="{{duration: 500}}" draggable="true" on:dragstart={() => dragStart(item.pNumber)} on:dragover|preventDefault = {dragOverItem} >
-					<h3> {item.name} </h3>
-					<span>NR: {item.pNumber}</span>
-					<div class="desription">
-					{item.desc}
-				</div>
-			</div>
-			{/each}
-		</div>
-	</div>
-	{/each}
-</div>
-</div>
