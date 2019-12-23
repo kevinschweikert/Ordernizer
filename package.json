@@ -4,9 +4,9 @@
   "main": "./src/electron.js",
   "license": "MIT",
   "author": "Kevin Schweikert <info@kevinschweikert.de> (http://kevinschweikert.de)",
-
   "devDependencies": {
     "electron": "^7.1.7",
+    "electron-builder": "^21.2.0",
     "now": "^16.7.0",
     "npm-run-all": "^4.1.5",
     "rollup": "^1.12.0",
@@ -31,6 +31,13 @@
     "electron": "run-s build pure-electron",
     "pure-electron": "electron .",
     "electron-dev": "run-p dev pure-electron-dev",
-    "pure-electron-dev": "NODE_ENV=development electron ."
+    "pure-electron-dev": "NODE_ENV=development electron .",
+    "dist": "electron-builder"
+  },
+  "build": {
+    "appId": "com.electron.ordernizer",
+    "mac": {
+      "category": "public.app-category.productivity"
+    }
   }
 }

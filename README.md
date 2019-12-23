@@ -9,6 +9,7 @@ WIP
 ## TODO
 
 - Make Cards sortable and remember vertical position
+- make Add Project Button 
 - Add Upload and Download functionality
 - Styling
 - Error Handling
