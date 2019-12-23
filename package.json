@@ -32,10 +32,11 @@
     "pure-electron": "electron .",
     "electron-dev": "run-p dev pure-electron-dev",
     "pure-electron-dev": "NODE_ENV=development electron .",
-    "dist": "electron-builder"
+    "dist": "electron-builder -lwm",
+    "postinstall": "electron-builder install-app-deps"
   },
   "build": {
-    "appId": "com.electron.ordernizer",
+    "appId": "kevinschweikert.ordernizer",
     "mac": {
       "category": "public.app-category.productivity"
     }
