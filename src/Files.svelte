@@ -69,6 +69,8 @@
 
     const updateData = (folderPath) => {
 
+        $configs = []
+
         //Get all Folders and Contents
         const folderCont = jetpack.inspectTree(folderPath)
             .children
