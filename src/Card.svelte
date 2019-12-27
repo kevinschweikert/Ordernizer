@@ -35,23 +35,10 @@
     });
     return index;
   };
+  
   const indexInConfig = getIndexInConfig();
 
-  const saveProject = () => {
-    const writePath = $sessionPath + "/" + path + "/" + $cfgFileName;
-    $configs[indexInConfig].project = project
-    fs.writeFile(writePath, JSON.stringify($configs[indexInConfig]), 'utf-8',(e) => {
-        if (e) {console.error("Could not write config to: " + writePath + e)}
-        })
-  };
 
-  const saveDescription = () => {
-    const writePath = $sessionPath + "/" + path + "/" + $cfgFileName;
-    $configs[indexInConfig].desc = desc
-    fs.writeFile(writePath, JSON.stringify($configs[indexInConfig]), 'utf-8',(e) => {
-        if (e) {console.error("Could not write config to: " + writePath + e)}
-        })
-  };
 </script>
 
 <style>
@@ -88,9 +75,9 @@
   draggable="true"
   on:dragstart={dragStart}
   on:dragover|preventDefault>
-  <input type="text" on:input={saveProject} bind:value={project}>
+  <input type="text"  bind:value={project}>
   <span>NR: {id}</span>
-  <div class="desription" contenteditable="true" on:input={saveDescription}>
+  <div class="desription" contenteditable="true">
     Beschreibung:
     <input type="text" bind:value={desc}>
   </div>

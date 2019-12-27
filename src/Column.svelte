@@ -1,22 +1,27 @@
 <script>
   import { configs, sessionPath, cfgFileName } from "./configs";
-  import { activeElement } from "./active";
+  import { activeElement, noChange } from "./active";
   import Card from "./Card.svelte";
 
-  const fs = require('fs')
+  const jetpack = require('fs-jetpack')
 
   export let name;
   export let state;
 
+  let newProjectName = ""
+
   const dropCard = () => {
       $activeElement.state = state
-      const writePath = $sessionPath + "/" + $activeElement.path + "/" + $cfgFileName
-      fs.writeFile(writePath, JSON.stringify($activeElement), 'utf-8',(e) => {
-        if (e) {console.error("Could not write config to: " + writePath + e)}
-        })
+      $noChange = true
+      jetpack.dir($sessionPath).dir($activeElement.path).write($cfgFileName, $activeElement, {atomic: true})
       $configs = [...$configs, $activeElement]
       $activeElement = []
   }
+
+  const createProject = () => {
+      jetpack.dir($sessionPath).dir(newProjectName)
+  }
+  
 </script>
 
 <style>
@@ -48,10 +53,15 @@
 <div class="column">
   <div class="title">{name}</div>
   <div class="drag-container" on:drop={dropCard} on:dragover|preventDefault>
-    {#each $configs as item}
-      {#if item.state == state}
+    {#each $configs.filter((config) => config.state == state) as item}
+      <!-- {#if item.state == state} -->
         <Card {...item} />
-      {/if}
+      <!-- {/if} -->
     {/each}
   </div>
+  {#if state == "angebot"}
+    <input type="text" bind:value={newProjectName}>
+    <button on:click={createProject}>+ ADD NEW PROJECT</button>
+  {/if}
 </div>
+

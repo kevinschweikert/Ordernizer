@@ -1,15 +1,16 @@
 <script>
-    import { configs, sessionPath, cfgFileName } from './configs'
+    import { configs, sessionPath, cfgFileName } from './configs';
+    import { noChange } from './active.js';
     import {onDestroy} from 'svelte';
 
     const chokidar = require('chokidar')
-    const fs = require('fs')
+    const jetpack = require('fs-jetpack')
     const path = require('path')
     const dialog = require('electron').remote.dialog 
     const Store = require('electron-store')
 
-    const configFileName = "project_config.json"
-    $cfgFileName = configFileName
+ 
+    $cfgFileName = "project_config.json"
 
     let watcher
     const store = new Store()
@@ -26,136 +27,84 @@
     }
 
     const createWatcher = (watchPath) => {
-        console.info("Initializing Watcher")
         watcher = chokidar.watch(watchPath, {ignoreInitial: true})
         watcher
         .on('change', changePath => {
-            console.log(changePath)
-            fs.readFile(changePath,{encoding: 'utf-8'}, (e, data) => {
-                if (e) {console.error("Could not read file: " + changePath) }
-                const config = JSON.parse(data)
-
-                try {
-                    let tempConfig = []
-                    $configs.forEach((element) => {
-                        if (element.id != config.id) {
-                            tempConfig = [...tempConfig, element]
-                        }
-                        $configs = [...tempConfig, config]
-                    })
+            //check is file write was own
+            if ($noChange) {
+                $noChange = false
+            }
+            else {
+                if (jetpack.inspect(changePath).name == $cfgFileName) { 
+                const changed = jetpack.read(changePath, "json") 
+                $configs = $configs.map(conf => conf.id == changed.id ? changed : conf) 
                 }
-                catch(err) {
-                    console.warn("Could not update file" + err)
-                }
-            })
+            }
         })
         .on('add', changePath => {
-            fs.readdir(path.dirname(changePath), (e, files) => {
-                let newFiles = []
-                files.forEach((file) => {
-                    if (file != $cfgFileName) {
-                        newFiles = [...newFiles, file]
-                    }
-                })
-                fs.readFile(path.dirname(changePath) + "/" + $cfgFileName, {encoding: 'utf-8'}, (e, data) => {
-                    const config = JSON.parse(data)
-                    let newConfig = []
-                    $configs.forEach((element) => {
-                        if (element.id == config.id) {
-                            element.files = newFiles
-                            newConfig = [...newConfig, element]
-                        } 
-                        else {
-                            newConfig = [...newConfig, element]
-                        }
-                    })
-                    $configs = newConfig
-                })
-            })
+
+
+            const dirPath = path.dirname(changePath)
+            const dirName = path.basename(dirPath)
+            const files = jetpack.list(dirPath).filter(file => file !== $cfgFileName)
+            const tempConf = $configs.filter(conf => conf.path == dirName)[0]
+            tempConf.files = files
+            $configs = $configs.map(conf => conf.path == dirName ? tempConf : conf)
+
         })
         .on('unlink', changePath => {
-            fs.readdir(path.dirname(changePath), (e, files) => {
-                let newFiles = []
-                files.forEach((file) => {
-                    if (file != $cfgFileName) {
-                        newFiles = [...newFiles, file]
-                    }
-                })
-                fs.readFile(path.dirname(changePath) + "/" + $cfgFileName, {encoding: 'utf-8'}, (e, data) => {
-                    const config = JSON.parse(data)
-                    let newConfig = []
-                    $configs.forEach((element) => {
-                        if (element.id == config.id) {
-                            element.files = newFiles
-                            newConfig = [...newConfig, element]
-                        } 
-                        else {
-                            newConfig = [...newConfig, element]
-                        }
-                    })
-                    $configs = newConfig
-                })
-            })
-        });
+
+            const dirPath = path.dirname(changePath)
+            const dirName = path.basename(dirPath)
+            const files = jetpack.list(dirPath).filter(file => file !== $cfgFileName)
+            const tempConf = $configs.filter(conf => conf.path == dirName)[0]
+            tempConf.files = files
+            $configs = $configs.map(conf => conf.path == dirName ? tempConf : conf)
+
+        })
+        .on('addDir', changePath => updateData($sessionPath))
+        .on('unlinkDir', changePath => updateData($sessionPath))
+        .on('error', error => console.error(error));
     }
 
     const updateData = (folderPath) => {
 
-        fs.readdir(folderPath, {withFileTypes: true}, (e, files) => {
-            if (e) {console.error("Could not read contents of: " + folderPath)}
-            files.forEach((file) => {
-                if (file.isDirectory()) {
-                    const projectPath = folderPath + "/" + file.name
-                    const configPath = projectPath + "/" + configFileName
-                    const additionalFiles = []
+        //Get all Folders and Contents
+        const folderCont = jetpack.inspectTree(folderPath)
+            .children
+            .filter(obj => obj.type == "dir")
+            .map(obj => ({name: obj.name, files: obj.children.map(obj => obj.name)})) 
 
-                    //check for additional files
-                    fs.readdir(projectPath, (e, files) => {
-                        files.forEach((file) => {
-                            if (file !== configFileName) {
-                                additionalFiles.push(file)
-                            }
-                        })
-                    })
-
-                    //check for config
-                    fs.access(configPath, (e) => {
-                        if (e) {
-                            // create Config File
-                            fs.writeFile(configPath, JSON.stringify(createConfig(projectPath, additionalFiles)), 'utf-8', (e) => {
-                                if (e) {console.error("Could not write config to: " + configPath)}
-                                console.log("Created Config File at: " + projectPath)
-                                $configs = [...$configs, createConfig(projectPath, additionalFiles)]
-                            })
-                        }
-                        else {
-                            // read Config File
-                            fs.readFile(configPath, {encoding: 'utf-8'}, (e, data) => {
-                                if (e) {console.error("Could not read config from: " + configPath)}
-                                let config = JSON.parse(data)
-                                config.files = additionalFiles
-
-                                //update Config File
-                                fs.writeFile(configPath, JSON.stringify(config), 'utf-8', (e) => {
-                                    if (e) {console.error("Could not write config to: " + configPath)}
-                                    console.log("Updatet Config at: " + projectPath)
-                                    $configs = [...$configs, config]
-                                })
-                            })
- 
-                        }
-
-                    })
-
-                }
-            })
-            if (!watcher) {
-            createWatcher($sessionPath)
+        //Check for Config file
+        folderCont.forEach((folder) => {
+            if (folder.files.some((file) => file == $cfgFileName)) {
             }
-        })
+            else {
+                const answer = dialog.showMessageBoxSync({
+                    type: "question",
+                    buttons: ["NEIN", "JA"],
+                    defaultId: 1,
+                    title: "Neue Konfiguration erstellen?",
+                    message:"Es wurde keine Konfiguration in dem Ordner " + folder.name + " gefunden. Wollen sie automatisch Eine erstellen lassen?",
 
+                })
+
+                if (answer == 1) {
+                    jetpack.dir(folderPath).dir(folder.name).write($cfgFileName, createConfig(folder.name, folder.files), {atomic: true})
+                }
+            }
+
+            //Load config
+            const config = jetpack.dir(folderPath).dir(folder.name).read($cfgFileName, "json")
+            config.files = jetpack.dir(folderPath).dir(folder.name).list().filter(file => file != $cfgFileName)
+            jetpack.dir(folderPath).dir(folder.name).write($cfgFileName, config, {atomic: true})
+            $configs = [...$configs, config]
+        })
         
 
+        if (!watcher) {
+            createWatcher($sessionPath)
+        }
     }
 
     const selectPath = () => {
@@ -179,7 +128,7 @@
 </script>
 
 <button on:click={selectPath}>Select Path</button>
-{$sessionPath}
+Ausgewählter Ordner: {$sessionPath}
 
 <style>
     /* your styles go here */
