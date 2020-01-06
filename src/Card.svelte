@@ -70,6 +70,7 @@
 
   h3 {
     margin: 0;
+    margin-bottom: 20px;
     word-wrap: break-word;
   }
 </style>
