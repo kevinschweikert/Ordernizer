@@ -51,19 +51,7 @@
     transition: all 0.5s;
   }
 
-  span {
-    font-size: 80%;
-  }
 
-  input {
-      margin: 5px;
-      width: 100%;
-      border: none;
-  }
-
-  input:focus {
-      border: 3px solid #555;
-  }
 </style>
 
 <div
