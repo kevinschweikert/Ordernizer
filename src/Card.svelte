@@ -1,7 +1,8 @@
 <script>
   import { configs, sessionPath, cfgFileName } from "./configs";
-  import { activeElement } from "./active";
-  const fs = require('fs')
+  import { activeElement} from "./active";
+  import Modal from './Modal.svelte';
+  import Files from './Files.svelte';
 
   export let id;
   export let path;
@@ -11,6 +12,13 @@
   export let files;
 
   let activeItem = "";
+  let modalActive = false
+  let fd
+
+  const toggleModal = () => {
+    modalActive = !modalActive
+  }
+
 
   const dragStart = () => {
     setTimeout(() => {
@@ -27,18 +35,6 @@
     }, 1);
   };
 
-  const getIndexInConfig = () => {
-    let index = 0;
-    $configs.some((e, i) => {
-      index = i;
-      return e.id == id;
-    });
-    return index;
-  };
-  
-  const indexInConfig = getIndexInConfig();
-
-
 </script>
 
 <style>
@@ -51,7 +47,7 @@
     border-radius: 10px;
     font-size: 150%;
     min-height: 200px;
-    overflow: hidden;
+    overflow: auto;
     transition: all 0.5s;
   }
 
@@ -73,18 +69,18 @@
 <div
   class="item"
   draggable="true"
+  on:click={toggleModal}
   on:dragstart={dragStart}
   on:dragover|preventDefault>
-  <input type="text"  bind:value={project}>
-  <span>NR: {id}</span>
-  <div class="desription" contenteditable="true">
+  <h3>{project}</h3>
+  <div class="desription">
     Beschreibung:
-    <input type="text" bind:value={desc}>
+    <p>{desc}</p>
   </div>
   <p>Files:</p>
-  <ul>
-    {#each files as file}
-      <li>{file}</li>
-    {/each}
-  </ul>
+  <Files {files} />
 </div>
+
+{#if modalActive}
+	 <Modal {project} {desc} {files} {path} {id} on:toggle={toggleModal}/>
+{/if}

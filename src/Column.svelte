@@ -8,6 +8,7 @@
   export let name;
   export let state;
 
+
   let newProjectName = ""
 
   const dropCard = () => {
@@ -18,10 +19,6 @@
       $activeElement = []
   }
 
-  const createProject = () => {
-      jetpack.dir($sessionPath).dir(newProjectName)
-  }
-  
 </script>
 
 <style>
@@ -47,11 +44,14 @@
     border: 1px dashed grey;
     border-radius: 10px;
     min-height: 500px;
+    padding-bottom: 100px;
   }
+
+
 </style>
 
 <div class="column">
-  <div class="title">{name}</div>
+  <div class="title">{name.toUpperCase()}</div>
   <div class="drag-container" on:drop={dropCard} on:dragover|preventDefault>
     {#each $configs.filter((config) => config.state == state) as item}
       <!-- {#if item.state == state} -->
@@ -59,9 +59,5 @@
       <!-- {/if} -->
     {/each}
   </div>
-  {#if state == "angebot"}
-    <input type="text" bind:value={newProjectName}>
-    <button on:click={createProject}>+ ADD NEW PROJECT</button>
-  {/if}
 </div>
 

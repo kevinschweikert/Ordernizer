@@ -1,21 +1,24 @@
 <script>
 import {onMount} from 'svelte';
-import Files from './Files.svelte';
+import Filemanager from './Filemanager.svelte';
 import Column from './Column.svelte'
+import AddProject from './AddProject.svelte'
+
 
 
 let columns = [
 	{name: "Angebote anfragen", state: "angebot"},
-	{name: "BA erstellen", state: "beschaffungsantrag"},
+	{name: "BA erstellt", state: "beschaffungsantrag"},
 	{name: "An Verwaltung", state: "verwaltung"},
-	{name: "Fertig", state: "fertig"},
+	{name: "Bestellt", state: "bestellt"},
+	{name: "Geliefert", state: "geliefert"},
 ]
 
 </script>
 
 
-<Files/>
-
+<Filemanager/>
+<AddProject />
 
 <div class="app">
 <div class="container">
