@@ -37,14 +37,34 @@
     "pure-electron": "electron .",
     "electron-dev": "run-p dev pure-electron-dev",
     "pure-electron-dev": "NODE_ENV=development electron .",
-    "dist": "electron-builder",
+    "dist-linux": "electron-builder -l",
+    "dist-mac": "electron-builder -m",
+    "dist-win": "electron-builder -w",
+    "dist-all": "electron-builder -lmw",
     "postinstall": "electron-builder install-app-deps",
     "prettier": "prettier --write --svelte-sort-order scripts-markup-styles ./**/*.svelte"
   },
   "build": {
     "appId": "kevinschweikert.ordernizer",
+    "productName": "Ordernizer",
+    "copyright": "Copyright @ 2020 ${author}",
     "mac": {
-      "category": "public.app-category.productivity"
+      "category": "public.app-category.productivity",
+      "target": "dmg",
+      "type": "distribution",
+      "icon": "./public/256x256.icns"
+    },
+    "dmg": {
+      "internetEnabled": "true"
+    },
+    "win": {
+      "target": "portable",
+      "icon": "./public/256x256.ico"
+    },
+    "linux": {
+      "category": "public.app-category.productivity",
+      "target": "deb",
+      "icon": "./public/256x256.png"
     }
   }
 }
