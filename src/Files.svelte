@@ -1,11 +1,12 @@
 <script>
 
-    import { beforeUpdate } from 'svelte';
-    import {sessionPath, cfgFileName} from './configs.js';
+    import { beforeUpdate} from 'svelte';
+    import {sessionPath, cfgFileName, configs} from './configs.js';
     const {shell} = require('electron');
     const path = require('path')
 
     export let files = []
+    export let projectPath = ""
     export let project = false
 
     let fileData = []
@@ -20,13 +21,12 @@
     });
 
     const showInFolder = () => {
-        console.log("Opening Folder: " + path.resolve($sessionPath, project, $cfgFileName))
-        shell.showItemInFolder(path.resolve($sessionPath, project, $cfgFileName))
+        shell.showItemInFolder(path.resolve($sessionPath, projectPath, $cfgFileName))
     }
 
     const openItem = (name, format) => {
         if (project) {
-            shell.openItem(path.resolve($sessionPath, project, [name, format].join(".")))
+            shell.openItem(path.resolve($sessionPath, projectPath, [name, format].join(".")))
         }
     }
 

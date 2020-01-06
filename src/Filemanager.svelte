@@ -84,6 +84,8 @@
         .on('error', error => console.error(error));
     }
 
+    onDestroy(() => watcher.close()) 
+
     const updateData = (folderPath) => {
 
         $configs = []

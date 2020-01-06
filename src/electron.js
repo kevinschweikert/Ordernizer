@@ -4,6 +4,7 @@ const path = require('path')
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
+let watcher;
 
 function createWindow() {
     const mode = process.env.NODE_ENV;
@@ -23,7 +24,7 @@ function createWindow() {
         mainWindow = null;
     });
 
-    let watcher;
+    
     if (process.env.NODE_ENV === 'development') {
         watcher = require('chokidar').watch(path.join(__dirname, '../public/bundle.js'), { ignoreInitial: true });
         watcher.on('change', () => {

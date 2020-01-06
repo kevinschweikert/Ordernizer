@@ -79,7 +79,7 @@
 
     <div>
         <p>Files:</p>
-        <Files {files} {project}/>
+        <Files {files} {project} projectPath={path}/>
     </div>
     <div>
         <button on:click={toggle}> Abbrechen </button>
