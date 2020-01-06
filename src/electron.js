@@ -11,6 +11,7 @@ function createWindow() {
     mainWindow = new BrowserWindow({
         width: 1600,
         height: 800,
+        icon: path.join(__dirname, '../public/ordernizer_icon.png'),
         title: 'Ordernizer',
         autoHideMenuBar: true,
         //titleBarStyle: 'hidden',
