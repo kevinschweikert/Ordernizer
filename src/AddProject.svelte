@@ -7,6 +7,11 @@
   };
 </script>
 
+<button on:click={toggleModal}>+ ADD NEW PROJECT</button>
+{#if modalActive}
+  <NewModal on:toggle={toggleModal} />
+{/if}
+
 <style>
   button {
     margin: 0 30px;
@@ -16,9 +21,3 @@
     cursor: pointer;
   }
 </style>
-
-<button on:click={toggleModal}>+ ADD NEW PROJECT</button>
-{#if modalActive}
-  <NewModal on:toggle={toggleModal} />
-{/if}
-

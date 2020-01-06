@@ -1,35 +1,61 @@
 <script>
-  import { createEventDispatcher } from 'svelte';
-  import {configs, sessionPath, cfgFileName, createConfig} from './configs'
-  const jetpack = require('fs-jetpack')
+  import { createEventDispatcher } from "svelte";
+  import { configs, sessionPath, cfgFileName, createConfig } from "./configs";
+  const jetpack = require("fs-jetpack");
+  const sanitize = require("sanitize-filename");
 
-  let project
-  let desc 
+  let project;
+  let desc;
 
-  let warning = false
+  let warning = false;
 
-  const dispatcher = createEventDispatcher()
+  const dispatcher = createEventDispatcher();
 
   const toggle = () => {
-      dispatcher("toggle")
-  }
+    dispatcher("toggle");
+  };
 
   const save = () => {
-      const folderNames = $configs.map(config => config.project)
-      if (folderNames.some(name => name == project)) {
-        warning = true
-      }
-      else {
-        warning = false
-        const path = [$sessionPath, project].join('/')
-        const config = createConfig(path, [], desc)
-        jetpack.dir($sessionPath).dir(project).write($cfgFileName, config, {atomic: true} )
-        toggle()
-      }
-  }
-
-
+    const folderName = sanitize(project);
+    console.log(folderName);
+    const folderNames = $configs.map(config => config.project);
+    if (folderNames.some(name => name == folderName)) {
+      warning = true;
+    } else {
+      warning = false;
+      const path = [$sessionPath, folderName].join("/");
+      const config = createConfig(path, [], desc);
+      jetpack.dir(path).write($cfgFileName, config, { atomic: true });
+      toggle();
+    }
+  };
 </script>
+
+<div id="myModal" class="modal" on:click|preventDefault={toggle}>
+
+  <!-- Modal content -->
+  <div class="modal-content" on:click|preventDefault|stopPropagation>
+    <div>
+      <p>Projektname</p>
+      <input type="text" bind:value={project} />
+    </div>
+
+    <div>
+      <p>Beschreibung:</p>
+      <textarea name="description" id="desc" bind:value={desc} />
+    </div>
+    <div>
+      <button on:click={toggle}>Abbrechen</button>
+      <button on:click={save}>Speichern</button>
+    </div>
+    {#if warning}
+      <p class="warning">
+        Name existiert bereits. Wählen Sie einen anderen Namen
+      </p>
+    {/if}
+  </div>
+
+</div>
 
 <style>
   .modal {
@@ -55,42 +81,16 @@
     width: 300px; /* Could be more or less, depending on screen size */
   }
 
- 
-
   #desc {
-      width: 100%;
-      min-height: 100px;
+    width: 100%;
+    min-height: 100px;
   }
 
   input {
-      width: 100%
+    width: 100%;
   }
 
   .warning {
     color: red;
   }
 </style>
-
-<div id="myModal" class="modal" on:click|preventDefault={toggle}>
-
-  <!-- Modal content -->
-  <div class="modal-content" on:click|preventDefault|stopPropagation>
-    <div>
-        <p>Projektname</p>
-        <input type="text" bind:value={project}>
-    </div>
-
-    <div>
-        <p>Beschreibung:</p>
-         <textarea name="description" id="desc" bind:value={desc}></textarea>
-    </div>
-    <div>
-        <button on:click={toggle}> Abbrechen </button>
-        <button on:click={save}> Speichern </button>
-    </div>
-    {#if warning}
-      <p class="warning">Name existiert bereits. Wählen Sie einen anderen Namen</p>
-    {/if}    
-  </div>
-
-</div>

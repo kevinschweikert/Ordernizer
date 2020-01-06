@@ -1,24 +1,42 @@
 <script>
-  import { createEventDispatcher } from 'svelte';
-  import {configs, sessionPath, cfgFileName, createConfig} from './configs'
+  import { createEventDispatcher } from "svelte";
+  import { configs, sessionPath, cfgFileName, createConfig } from "./configs";
 
-  export let paths = []
-  export let selected = []
-  $: buttonText = selected.length == 0 ? "Abbrechen" : "Anlegen"
+  export let paths = [];
+  export let selected = [];
+  $: buttonText = selected.length == 0 ? "Abbrechen" : "Anlegen";
 
-
-  const dispatcher = createEventDispatcher()
+  const dispatcher = createEventDispatcher();
 
   const toggle = () => {
-      dispatcher("toggle")
-  }
+    dispatcher("toggle");
+  };
 
-  const createConfigs = (selected) => {
-      dispatcher("create")
-  }
-
-
+  const createConfigs = selected => {
+    dispatcher("create");
+  };
 </script>
+
+<div id="myModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <p>
+      In den folgenden Ordnern konnten keine Konfigurationsdateien gefunden
+      werden. Welche möchten Sie automatisch anlegen?
+    </p>
+
+    {#each paths as path}
+      <label>
+        <input type="checkbox" bind:group={selected} value={path} />
+        {path}
+      </label>
+    {/each}
+    <button on:click={createConfigs}>{buttonText}</button>
+
+  </div>
+
+</div>
 
 <style>
   .modal {
@@ -43,26 +61,4 @@
     padding: 20px;
     width: 300px; /* Could be more or less, depending on screen size */
   }
-
-
-
 </style>
-
-<div id="myModal" class="modal">
-
-  <!-- Modal content -->
-  <div class="modal-content" >
-  <p>In den folgenden Ordnern konnten keine Konfigurationsdateien gefunden werden. Welche möchten Sie automatisch anlegen?</p>
-    
-    {#each paths as path}
-    <label>
-        <input type="checkbox" bind:group={selected} value={path}>
-        {path}
-    </label>
-    {/each}
-   <button on:click={createConfigs}>{buttonText}</button>
-    
-  </div>
-    
-
-</div>
