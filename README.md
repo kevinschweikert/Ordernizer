@@ -16,4 +16,4 @@ WIP
 - [ ] Styling
 - [ ] Error Handling and Testing
 - [x] Add icon for app
-- [ ] Translate Interface to german
+- [x] Translate Interface to german
