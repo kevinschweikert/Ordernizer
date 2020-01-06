@@ -43,7 +43,7 @@
     </div>
 
     <div>
-      <p>Files:</p>
+      <p>Dateien:</p>
       <Files {files} {project} projectPath={path} />
     </div>
     <div class="buttons">

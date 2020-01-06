@@ -15,6 +15,5 @@ WIP
 - [x] Add Upload and Download functionality (open native file dialog)
 - [ ] Styling
 - [ ] Error Handling and Testing
-- [ ] Add icon for app
+- [x] Add icon for app
 - [ ] Translate Interface to german
-- [ ] 

@@ -46,7 +46,7 @@
     Beschreibung:
     <p>{desc}</p>
   </div>
-  <p>Files:</p>
+  <p>Dateien:</p>
   <Files {files} />
 </div>
 

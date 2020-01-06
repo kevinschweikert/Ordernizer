@@ -161,8 +161,11 @@
 </script>
 
 <div>
-  <button on:click={selectPath}>Select Path</button>
+  <button on:click={selectPath}>Pfad auswählen</button>
+  <span>
   Ausgewählter Ordner: {$sessionPath}
+  </span>
+  
   {#if modalActive}
     <ConfigModal
       on:toggle={toggleModal}
@@ -177,5 +180,9 @@
   button {
     margin: 30px;
     cursor: pointer;
+  }
+
+  span {
+      color: rgba(0,0,0,0.5);
   }
 </style>

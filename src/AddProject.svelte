@@ -7,7 +7,7 @@
   };
 </script>
 
-<button on:click={toggleModal}>+ ADD NEW PROJECT</button>
+<button on:click={toggleModal}>Neues Projekt anlegen</button>
 {#if modalActive}
   <NewModal on:toggle={toggleModal} />
 {/if}
