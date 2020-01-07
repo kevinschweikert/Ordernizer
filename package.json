@@ -1,7 +1,7 @@
 {
   "name": "ordernizer",
   "description": "Application to organize the order process in a kanban/Trello style",
-  "version": "0.3.7",
+  "version": "0.3.8",
   "main": "./src/electron.js",
   "license": "MIT",
   "author": "Kevin Schweikert <info@kevinschweikert.de> (http://kevinschweikert.de)",
@@ -29,7 +29,7 @@
     "sanitize-filename": "^1.6.3"
   },
   "scripts": {
-    "bundle": "rollup -c",
+    "build": "rollup -c",
     "dev": "rollup -c -w",
     "start": "sirv public --single",
     "start:dev": "sirv public --single --dev",
