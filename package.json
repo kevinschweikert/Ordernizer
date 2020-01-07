@@ -37,10 +37,10 @@
     "pure-electron": "electron .",
     "electron-dev": "run-p dev pure-electron-dev",
     "pure-electron-dev": "NODE_ENV=development electron .",
-    "dist-linux": "electron-builder -l",
-    "dist-mac": "electron-builder -m",
-    "dist-win": "electron-builder -w",
-    "dist-all": "electron-builder -lmw",
+    "dist-linux": "run-s build electron-builder -l",
+    "dist-mac": "run-s build electron-builder -m",
+    "dist-win": "run-s build electron-builder -w",
+    "dist-all": "run-s build electron-builder -lmw",
     "postinstall": "electron-builder install-app-deps",
     "prettier": "prettier --write --svelte-sort-order scripts-markup-styles ./**/*.svelte"
   },
@@ -53,9 +53,6 @@
       "target": "dmg",
       "type": "distribution",
       "icon": "./public/256x256.icns"
-    },
-    "dmg": {
-      "internetEnabled": "true"
     },
     "win": {
       "target": "portable",
