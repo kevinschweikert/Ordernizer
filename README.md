@@ -1,3 +1,6 @@
+![Ordernizer Logo](./public/256x256.png)
+
+
 # Ordernizer
 
 This is an app that helps to keep track of our orders at university
