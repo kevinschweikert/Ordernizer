@@ -1,6 +1,6 @@
 {
   "name": "ordernizer",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "main": "./src/electron.js",
   "license": "MIT",
   "author": "Kevin Schweikert <info@kevinschweikert.de> (http://kevinschweikert.de)",
@@ -29,7 +29,7 @@
     "sanitize-filename": "^1.6.3"
   },
   "scripts": {
-    "build": "rollup -c",
+    "bundle": "rollup -c",
     "dev": "rollup -c -w",
     "start": "sirv public --single",
     "start:dev": "sirv public --single --dev",
@@ -40,7 +40,7 @@
     "dist-linux": "electron-builder -l",
     "dist-mac": "electron-builder -m",
     "dist-win": "electron-builder -w",
-    "dist-all": "electron-builder -lmw",
+    "build": "electron-builder -lmw",
     "postinstall": "electron-builder install-app-deps",
     "prettier": "prettier --write --svelte-sort-order scripts-markup-styles ./**/*.svelte"
   },
