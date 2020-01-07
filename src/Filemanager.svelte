@@ -1,5 +1,5 @@
 <script>
-  import { configs, sessionPath, cfgFileName, createConfig } from "./configs";
+  import { configs, sessionPath, cfgFileName, createConfig, mainFileName } from "./configs";
   import { noChange } from "./active.js";
   import { onDestroy } from "svelte";
   import ConfigModal from "./ConfigModal.svelte";
@@ -147,16 +147,21 @@
       buttonLabel: "Select"
     });
 
-    $sessionPath = folderPath[0];
-
-    store.set("defaultPath", $sessionPath);
-
-    updateData($sessionPath);
+    //check for .ordernizer file
+    if (jetpack.dir(folderPath[0]).exists($mainFileName)) {
+      $sessionPath = folderPath[0];
+      store.set("defaultPath", $sessionPath);
+      updateData($sessionPath);
+    } else {
+      alert("Der ausgewählte Ordner enthält keine Datei mit dem Namen: '" + $mainFileName + "'. Prüfen Sie bitte, ob sie den richtigen Ordner ausgewählt haben")
+    }
   };
 
   if (store.get("defaultPath")) {
-    $sessionPath = store.get("defaultPath");
-    updateData($sessionPath);
+    if (jetpack.dir(store.get("defaultPath")).exists($mainFileName)) {
+      $sessionPath = store.get("defaultPath");
+      updateData($sessionPath);
+    }
   }
 </script>
 

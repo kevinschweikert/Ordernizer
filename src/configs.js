@@ -7,6 +7,8 @@ export const sessionPath = writable("");
 
 export const cfgFileName = writable("project_config.json");
 
+export const mainFileName = writable(".ordernizer");
+
 export const createConfig = (
   projectPath,
   additionalFiles = [],
