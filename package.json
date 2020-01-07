@@ -1,6 +1,6 @@
 {
   "name": "ordernizer",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "main": "./src/electron.js",
   "license": "MIT",
   "author": "Kevin Schweikert <info@kevinschweikert.de> (http://kevinschweikert.de)",
@@ -37,15 +37,15 @@
     "pure-electron": "electron .",
     "electron-dev": "run-p dev pure-electron-dev",
     "pure-electron-dev": "NODE_ENV=development electron .",
-    "dist-linux": "run-s build electron-builder -l",
-    "dist-mac": "run-s build electron-builder -m",
-    "dist-win": "run-s build electron-builder -w",
-    "dist-all": "run-s build electron-builder -lmw",
+    "dist-linux": "electron-builder -l",
+    "dist-mac": "electron-builder -m",
+    "dist-win": "electron-builder -w",
+    "dist-all": "electron-builder -lmw",
     "postinstall": "electron-builder install-app-deps",
     "prettier": "prettier --write --svelte-sort-order scripts-markup-styles ./**/*.svelte"
   },
   "build": {
-    "appId": "kevinschweikert.ordernizer",
+    "appId": "com.electron.ordernizer",
     "productName": "Ordernizer",
     "copyright": "Copyright @ 2020 ${author}",
     "mac": {
@@ -65,3 +65,4 @@
     }
   }
 }
+
