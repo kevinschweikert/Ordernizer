@@ -1,6 +1,6 @@
 {
   "name": "ordernizer",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "main": "./src/electron.js",
   "license": "MIT",
   "author": "Kevin Schweikert <info@kevinschweikert.de> (http://kevinschweikert.de)",
