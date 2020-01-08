@@ -27,4 +27,5 @@ WIP
 - [ ] Change resolution of main window and app
 - [ ] Option to archive project
 - [ ] Create animations for cards
+- [ ] Dark Mode
 - [ ] OPTIONAL: add username field

@@ -3,6 +3,7 @@
   import Filemanager from "./Filemanager.svelte";
   import Column from "./Column.svelte";
   import AddProject from "./AddProject.svelte";
+  import DarkMode from "./DarkMode.svelte";
 
   let columns = [
     { name: "Angebote anfragen", state: "angebot" },
@@ -13,6 +14,7 @@
   ];
 </script>
 
+<DarkMode />
 <Filemanager />
 <AddProject />
 <div class="app">
@@ -23,6 +25,7 @@
     {/each}
   </div>
 </div>
+
 
 <style>
   .app {
