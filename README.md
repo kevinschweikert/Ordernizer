@@ -11,20 +11,18 @@ WIP
 
 ## TODO
 
-- [ ] Make Cards sortable and remember vertical position
 - [x] Make create config Dialog a modal
 - [x] make Add Project Button
 - [x] Functionality to edit card properties
 - [x] Add Upload and Download functionality (open native file dialog)
-- [ ] Styling
-- [ ] Error Handling and Testing
 - [x] Add icon for app
 - [x] Translate Interface to german
-- [ ] Make sure folder ist updated when path is changed
-- [ ] Remove double card when new Project is added
 - [x] check for ".ordernizer" file in main folder to prevent wrong paths
-- [ ] HTML validate input when entering new project name
+- [x] HTML validate input when entering new project name
+- [ ] Remove double card when new Project is added
+- [ ] Make Cards sortable, animate and remember vertical position
+- [ ] Make sure folder ist updated when path is changed
 - [ ] Change resolution of main window and app
 - [ ] Option to archive project
-- [ ] Create animations for cards
+- [ ] Error Handling and Testing
 - [ ] OPTIONAL: add username field
