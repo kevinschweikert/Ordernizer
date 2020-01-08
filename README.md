@@ -1,7 +1,5 @@
-![Ordernizer Logo](./public/256x256.png)
-
-
 # Ordernizer
+![Ordernizer Logo](./public/256x256.png)
 
 This is an app that helps to keep track of our orders at university
 
@@ -24,5 +22,6 @@ WIP
 - [ ] Make sure folder ist updated when path is changed
 - [ ] Change resolution of main window and app
 - [ ] Option to archive project
-- [ ] Error Handling and Testing
+- [ ] Create animations for cards
+- [x] Dark Mode
 - [ ] OPTIONAL: add username field
