@@ -1,7 +1,42 @@
 :root {
 	--light-bg: #e0e0e0;
-	--text-color: #4f4f4f;
+	--primary-text-color: #4f4f4f;
+	--secondary-text-color: #4f4f4f;
 	--card-bg: #f2f2f2;
-	--bg: #d6d6d6;
-	--test: red;
+	--bg: #f2f2f2;
+	--roundness-small: 5px; 
+	--roundness-big: 10px; 
+	--shadow: 4px 4px 20px rgba(0, 0, 0, 0.2);
+	--button-bg: var(--bg);
+	--button-color: var(--primary-text-color);
+	--button-border: 2px solid var(--primary-text-color)
+
+}
+
+[data-theme="dark"] {
+	--primary-text-color: #e0e0e0;
+	--secondary-text-color: #4f4f4f;
+	--card-bg: #4f4f4f;
+	--bg: #333333;
+	--light-bg: var(--bg);
+	--button-bg: var(--bg);
+	--button-color: #e0e0e0;
+	--button-border: 1px solid var(--primary-text-color)
+
+
+}
+
+html {
+	background-color: var(--bg);
+	font-family: 'Montserrat', sans-serif;
+}
+
+button {
+	cursor: pointer;
+	color: var(--button-color);
+	background-color: var(--button-bg);
+	color: var(--button-color);
+	border: var(--button-border);
+	border-radius: var(--roundness-small);
+	padding: 10px;
 }
