@@ -46,7 +46,8 @@
     font-size: 200%;
     font-weight: 900;
     text-align: center;
-    border: 2px solid;
+    border: 2px solid var(--primary-text-color);
+    color: var(--primary-text-color);
     border-radius: 10px;
     margin-bottom: 50px;
     padding: 20px;
@@ -54,8 +55,8 @@
   }
 
   .drag-container {
-    border: 1px dashed grey;
-    border-radius: 10px;
+    border: 1px dashed var(--primary-text-color);
+    border-radius: var(--roundness-big);
     min-height: 500px;
     padding-bottom: 100px;
   }

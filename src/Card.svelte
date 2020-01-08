@@ -56,16 +56,17 @@
 
 <style>
   .item {
+    color: var(--primary-text-color);
+    background-color: var(--card-bg);
     margin: 20px 20px;
     padding: 40px;
     cursor: pointer;
     user-select: none;
-    box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.2);
-    border-radius: 10px;
+    box-shadow:var(--shadow);
+    border-radius: var(--roundness-big);
     font-size: 100%;
     min-height: 200px;
     overflow: auto;
-    transition: all 0.5s;
   }
 
   h3 {

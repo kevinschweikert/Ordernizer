@@ -70,7 +70,7 @@
     cursor: pointer;
     font-size: 80%;
     border-radius: 5px;
-    padding: 5px;
+    padding: 10px;
     background-color: var(--light-bg);
     overflow: hidden;
     overflow-wrap: break-word;

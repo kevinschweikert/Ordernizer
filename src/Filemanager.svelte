@@ -9,6 +9,7 @@
   const path = require("path");
   const dialog = require("electron").remote.dialog;
   const Store = require("electron-store");
+  const { shell } = require("electron");
 
   let watcher;
   const store = new Store();
@@ -158,12 +159,16 @@
     $sessionPath = store.get("defaultPath");
     updateData($sessionPath);
   }
+
+  const openSessionFolder = () => {
+    shell.showItemInFolder($sessionPath + "/.")
+  }
 </script>
 
 <div>
   <button on:click={selectPath}>Pfad auswählen</button>
   <span>
-  Ausgewählter Ordner: {$sessionPath}
+  Ausgewählter Ordner: <span class="underline" on:click={openSessionFolder}>{$sessionPath}</span>
   </span>
   
   {#if modalActive}
@@ -183,6 +188,11 @@
   }
 
   span {
-      color: rgba(0,0,0,0.5);
+      color: var(--primary-text-color) ;
+  }
+
+  .underline {
+    text-decoration: underline;
+    cursor: pointer;
   }
 </style>
