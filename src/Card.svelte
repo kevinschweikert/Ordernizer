@@ -45,17 +45,6 @@
 {/if}
 
 <style>
-  .after::after {
-    content: "After";
-    margin: 30px 0;
-  }
-
-  .before::before {
-    content: "Before";
-    margin: 30px 0;
-  }
-
-
   .item {
     margin: 20px 20px;
     padding: 40px;
