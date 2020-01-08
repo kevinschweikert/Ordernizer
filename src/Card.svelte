@@ -73,4 +73,8 @@
     margin-bottom: 20px;
     word-wrap: break-word;
   }
+
+  p {
+    white-space: pre-wrap;
+  }
 </style>
