@@ -2,12 +2,14 @@
   import { createEventDispatcher } from "svelte";
   import { configs, sessionPath, cfgFileName, createConfig } from "./configs";
   const jetpack = require("fs-jetpack");
-  const sanitize = require("sanitize-filename");
+  const path = require("path")
 
-  let project;
-  let desc;
+  let project = "";
+  let desc = ""; 
 
-  let warning = false;
+  let nameWarning = false;
+  let emptyWarning = false;
+  let submitClicked = false;
 
   const dispatcher = createEventDispatcher();
 
@@ -15,46 +17,54 @@
     dispatcher("toggle");
   };
 
+  $: $configs.map(config => config.project).some(name => name == project) ? nameWarning = true : nameWarning = false;
+  $: project == "" && submitClicked ? emptyWarning = true : emptyWarning = false;
+
   const save = () => {
-    const folderName = sanitize(project);
-    console.log(folderName);
-    const folderNames = $configs.map(config => config.project);
-    if (folderNames.some(name => name == folderName)) {
-      warning = true;
-    } else {
-      warning = false;
-      const path = [$sessionPath, folderName].join("/");
-      const config = createConfig(path, [], desc);
-      jetpack.dir(path).write($cfgFileName, config, { atomic: true });
+    submitClicked = true
+    if (!nameWarning && !emptyWarning) {
+      const config = createConfig(project, path.join($sessionPath, project.replace(/\s/g,'_')), [], desc);
+      jetpack.dir($sessionPath).dir(project.replace(/\s/g,'_')).write($cfgFileName, config, { atomic: true });
       toggle();
+      submitClicked= false
     }
   };
+
 </script>
 
 <div id="myModal" class="modal" on:click|preventDefault={toggle}>
 
   <!-- Modal content -->
   <div class="modal-content" on:click|preventDefault|stopPropagation>
-    <div>
-      <p>Projektname</p>
-      <input type="text" bind:value={project} />
-    </div>
+    <form>
 
-    <div>
-      <p>Beschreibung:</p>
-      <textarea name="description" id="desc" bind:value={desc} />
-    </div>
-    <div>
-      <button on:click={toggle}>Abbrechen</button>
-      <button on:click={save}>Speichern</button>
-    </div>
-    {#if warning}
+    
+      <label for="projektname">Projektname</label>
+      <input type="text" bind:value={project} id="projektname" placeholder="Gebe einen Projektnamen ein" required pattern="[a-zäöüA-Z0-9_\s]+"/>
+      <span class="warning"></span>
+
+    {#if nameWarning}
       <p class="warning">
         Name existiert bereits. Wählen Sie einen anderen Namen
       </p>
     {/if}
-  </div>
+    {#if emptyWarning}
+      <p class="warning">
+        Der Projektname darf nicht leer bleiben
+      </p>
+    {/if}
 
+      <label for="desc">Beschreibung:</label>
+      <textarea name="description" id="desc" bind:value={desc} placeholder="Gebe eine kurze Beschreibung ein" />
+
+    <div>
+      <button on:click={toggle}>Abbrechen</button>
+      <button on:click={save} id="save">Speichern</button>
+    </div>
+
+    </form>
+  </div>
+  
 </div>
 
 <style>
@@ -89,8 +99,23 @@
   input {
     width: 100%;
   }
+  input:invalid:not(:placeholder-shown)+ span.warning:after {
+    content: "Deine Eingabe enthält ungültige Zeichen. Erlaubte Zeichen sind 'a-z', 'A-Z', 'aöü', '0-9' und '_'";
+  }
+
+  input:valid {
+    border: 2px solid green;
+  }
 
   .warning {
     color: red;
+  }
+
+  label {
+    margin: 20px 0;
+  }
+
+    #save {
+    background-color: green;
   }
 </style>

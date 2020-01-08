@@ -10,6 +10,7 @@ export const cfgFileName = writable("project_config.json");
 export const mainFileName = writable(".ordernizer");
 
 export const createConfig = (
+  projectName,
   projectPath,
   additionalFiles = [],
   description = ""
@@ -20,7 +21,7 @@ export const createConfig = (
         .toString(36)
         .substr(2, 5) + Date.now().toString(36),
     path: path.basename(projectPath),
-    project: path.basename(projectPath),
+    project: projectName,
     state: "angebot",
     desc: description,
     files: additionalFiles

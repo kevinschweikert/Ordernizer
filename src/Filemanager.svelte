@@ -31,7 +31,7 @@
         jetpack
           .dir($sessionPath)
           .dir(path)
-          .write($cfgFileName, createConfig(path, files), { atomic: true });
+          .write($cfgFileName, createConfig(path, path, files, ""), { atomic: true });
       });
     }
     toggleModal();
