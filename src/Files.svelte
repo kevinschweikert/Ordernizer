@@ -42,20 +42,23 @@
 {/if}
 
 <div class="files" title="Open File">
+  {#if fileData.length > 0}
+    {#each fileData as data}
+      {#if data.format.localeCompare('jpg') == 0 || data.format.localeCompare('png') == 0}
+        <img src="../public/images/image.svg" alt="image icon" />
+      {:else if data.format.localeCompare('pdf') == 0}
+        <img src="../public/images/pdf.svg" alt="pdf icon" />
+      {:else}
+        <img src="../public/images/file.svg" alt="file icon" />
+      {/if}
 
-  {#each fileData as data}
-    {#if data.format.toLowerCase() == 'jpg' || data.format.toLowerCase() == 'png'}
-      <img src="../public/images/image.svg" alt="image icon" />
-    {:else if data.format.toLowerCase() == 'pdf'}
-      <img src="../public/images/pdf.svg" alt="pdf icon" />
-    {:else}
-      <img src="../public/images/file.svg" alt="file icon" />
-    {/if}
-
-    <span class="name" on:click={() => openItem(data.name, data.format)}>
-      {data.name}
-    </span>
-  {/each}
+      <span class="name" on:click={() => openItem(data.name, data.format)}>
+        {data.name}
+      </span>
+    {/each}
+  {:else}
+    <p>Keine Dateien vorhanden</p>
+  {/if}
 
 </div>
 

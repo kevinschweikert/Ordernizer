@@ -26,7 +26,6 @@
   </div>
 </div>
 
-
 <style>
   .app {
     display: flex;

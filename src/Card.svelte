@@ -62,7 +62,7 @@
     padding: 40px;
     cursor: pointer;
     user-select: none;
-    box-shadow:var(--shadow);
+    box-shadow: var(--shadow);
     border-radius: var(--roundness-big);
     font-size: 100%;
     min-height: 200px;

@@ -34,7 +34,15 @@
           .dir($sessionPath)
           .dir(path)
           .list()
-          .filter(file => file != $cfgFileName);
+          .filter(file => file != $cfgFileName)
+          .filter(
+            file =>
+              jetpack
+                .dir($sessionPath)
+                .dir(path)
+                .exists(file) == "file"
+          )
+          .filter(file => file.charAt(0) != ".");
         jetpack
           .dir($sessionPath)
           .dir(path)
@@ -125,7 +133,15 @@
           .dir(folderPath)
           .dir(folder.name)
           .list()
-          .filter(file => file != $cfgFileName);
+          .filter(file => file != $cfgFileName)
+          .filter(
+            file =>
+              jetpack
+                .dir($sessionPath)
+                .dir(folder.name)
+                .exists(file) == "file"
+          )
+          .filter(file => file.charAt(0) != ".");
         config.path = folder.name;
         jetpack
           .dir(folderPath)
@@ -178,16 +194,17 @@
   }
 
   const openSessionFolder = () => {
-    shell.showItemInFolder($sessionPath + "/.")
-  }
+    shell.showItemInFolder($sessionPath + "/.");
+  };
 </script>
 
 <div>
   <button on:click={selectPath}>Pfad auswählen</button>
   <span>
-  Ausgewählter Ordner: <span class="underline" on:click={openSessionFolder}>{$sessionPath}</span>
+    Ausgewählter Ordner:
+    <span class="underline" on:click={openSessionFolder}>{$sessionPath}</span>
   </span>
-  
+
   {#if modalActive}
     <ConfigModal
       on:toggle={toggleModal}
@@ -205,7 +222,7 @@
   }
 
   span {
-      color: var(--primary-text-color) ;
+    color: var(--primary-text-color);
   }
 
   .underline {

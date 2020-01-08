@@ -70,8 +70,9 @@
 
   /* Modal Content/Box */
   .modal-content {
-    background-color: #fefefe;
-    border-radius: 10px;
+    background-color: var(--card-bg);
+    color: var(--primary-text-color);
+    border-radius: var(--roundness-big);
     border: none;
     box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.2);
     margin: 15% auto; /* 15% from the top and centered */
@@ -90,6 +91,7 @@
 
   button {
     cursor: pointer;
+    border: none;
   }
 
   .buttons {
