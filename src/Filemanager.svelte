@@ -1,5 +1,11 @@
 <script>
-  import { configs, sessionPath, cfgFileName, createConfig, mainFileName } from "./configs";
+  import {
+    configs,
+    sessionPath,
+    cfgFileName,
+    createConfig,
+    mainFileName
+  } from "./configs";
   import { noChange } from "./active.js";
   import { onDestroy } from "svelte";
   import ConfigModal from "./ConfigModal.svelte";
@@ -31,7 +37,9 @@
         jetpack
           .dir($sessionPath)
           .dir(path)
-          .write($cfgFileName, createConfig(path, path, files, ""), { atomic: true });
+          .write($cfgFileName, createConfig(path, path, files, ""), {
+            atomic: true
+          });
       });
     }
     toggleModal();
@@ -153,7 +161,11 @@
       store.set("defaultPath", $sessionPath);
       updateData($sessionPath);
     } else {
-      alert("Der ausgewählte Ordner enthält keine Datei mit dem Namen: '" + $mainFileName + "'. Prüfen Sie bitte, ob sie den richtigen Ordner ausgewählt haben")
+      alert(
+        "Der ausgewählte Ordner enthält keine Datei mit dem Namen: '" +
+          $mainFileName +
+          "'. Prüfen Sie bitte, ob sie den richtigen Ordner ausgewählt haben"
+      );
     }
   };
 
@@ -167,10 +179,8 @@
 
 <div>
   <button on:click={selectPath}>Pfad auswählen</button>
-  <span>
-  Ausgewählter Ordner: {$sessionPath}
-  </span>
-  
+  <span>Ausgewählter Ordner: {$sessionPath}</span>
+
   {#if modalActive}
     <ConfigModal
       on:toggle={toggleModal}
@@ -188,6 +198,6 @@
   }
 
   span {
-      color: rgba(0,0,0,0.5);
+    color: rgba(0, 0, 0, 0.5);
   }
 </style>
