@@ -2,7 +2,8 @@
 
    
 <img src={logo} alt="Ordernizer Logo" on:click={toggleTheme}>
-<h1 on:click={toggleTheme}>    ORDERNIZER </h1>
+<h1 on:click={toggleTheme}>    ORDERNIZER {version}</h1>
+
 
 
 
@@ -27,6 +28,11 @@
 
 </style>
 <script>
+const pjson = require("../package.json")
+
+const version = pjson.version
+console.log("You are running Version: " + version)
+
 let darkMode = false
 let logo = "../public/256x256.png"
 
