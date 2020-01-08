@@ -31,6 +31,17 @@ html {
 	font-family: 'Montserrat', sans-serif;
 }
 
+::-webkit-scrollbar {
+	width: 0px;
+	height: 5px;;
+	background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+	background: var(--primary-text-color);
+}
+
+
 button {
 	cursor: pointer;
 	color: var(--button-color);
