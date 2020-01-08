@@ -1,5 +1,6 @@
 <script>
   import { configs, sessionPath, cfgFileName } from "./configs";
+  import { onMount } from "svelte";
   import { activeElement } from "./active";
   import Modal from "./Modal.svelte";
   import Files from "./Files.svelte";
@@ -13,34 +14,22 @@
 
   let activeItem = "";
   let modalActive = false;
-  let fd;
+  let card;
 
   const toggleModal = () => {
     modalActive = !modalActive;
   };
 
-  const dragStart = () => {
-    setTimeout(() => {
-      $activeElement = [];
-      let newConfig = $configs.filter(config => {
-        if (config.id == id) {
-          $activeElement = config;
-          return false;
-        } else {
-          return true;
-        }
-      });
-      $configs = newConfig;
-    }, 1);
-  };
-</script>
 
+
+  
+
+</script>
 <div
+  
   class="item"
   draggable="true"
-  on:click={toggleModal}
-  on:dragstart={dragStart}
-  on:dragover|preventDefault>
+  on:click={toggleModal}>
   <h3>{project}</h3>
   <div class="desription">
     Beschreibung:
@@ -49,6 +38,7 @@
   <p>Dateien:</p>
   <Files {files} />
 </div>
+
 
 {#if modalActive}
   <Modal {project} {desc} {files} {path} {id} on:toggle={toggleModal} />
