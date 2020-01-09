@@ -4,6 +4,7 @@
   import Column from "./Column.svelte";
   import AddProject from "./AddProject.svelte";
   import ThemeToggle from "./ThemeToggle.svelte";
+  import Navbar from "./Navbar.svelte";
 
   let columns = [
     { name: "Angebote anfragen", state: "angebot" },
@@ -14,9 +15,8 @@
   ];
 </script>
 
-<ThemeToggle />
-<Filemanager />
-<AddProject />
+<Navbar />
+
 <div class="app">
 
   <div class="container">
@@ -41,7 +41,8 @@
 
   .container {
     display: grid;
-    grid-auto-columns: minmax(350px, 1fr);
+    grid-auto-columns: minmax(100px, 1fr);
     grid-auto-flow: column;
+    grid-gap: 10px;
   }
 </style>

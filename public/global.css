@@ -10,6 +10,7 @@
   --button-bg: var(--bg);
   --button-color: var(--primary-text-color);
   --button-border: 2px solid var(--primary-text-color);
+  --light: #f2f2f2;
 }
 
 [data-theme="dark"] {
@@ -21,11 +22,16 @@
   --button-bg: var(--bg);
   --button-color: #e0e0e0;
   --button-border: 1px solid var(--primary-text-color);
+  --light: #e0e0e0;
 }
 
 html {
   background-color: var(--bg);
   font-family: "Montserrat", sans-serif;
+}
+
+html[data-theme="dark"] img.invert{
+  filter: invert(100%)
 }
 
 ::-webkit-scrollbar {
@@ -51,11 +57,18 @@ button {
 
 input,
 textarea {
+  font-family: inherit;
   border-radius: var(--roundness-small);
   margin: 20px 0;
-  padding: 10px 2px;
+  padding-left: 10px;
+  padding: 10px 0px;
   font-size: 100%;
   background-color: var(--light-bg);
   color: var(--primary-text-color);
   border: none;
+}
+
+::placeholder {
+  margin-left: 10px;
+  padding-left: 10px;
 }

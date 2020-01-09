@@ -10,7 +10,7 @@ function createWindow() {
   const mode = process.env.NODE_ENV;
   mainWindow = new BrowserWindow({
     width: 1600,
-    height: 800,
+    height: 1000,
     icon: path.join(__dirname, "../public/ordernizer_icon.png"),
     title: "Ordernizer",
     autoHideMenuBar: true,

@@ -7,17 +7,25 @@
   };
 </script>
 
-<button on:click={toggleModal}>Neues Projekt anlegen</button>
+<img
+  src="../public/images/plus-square.svg"
+  on:click={toggleModal}
+  class="invert"
+  title="Neues Projekt anlegen"
+  alt="Projekt anlegen Button" />
+
 {#if modalActive}
   <NewModal on:toggle={toggleModal} />
 {/if}
 
 <style>
-  button {
-    margin: 0 30px;
-    min-width: 10%;
-    min-height: 70px;
-    border-radius: 10px;
+  img {
+    width: 3vw;
+    margin: auto auto;
     cursor: pointer;
+  }
+
+  img:hover {
+    opacity: 0.5;
   }
 </style>

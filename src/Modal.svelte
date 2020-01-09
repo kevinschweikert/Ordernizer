@@ -75,7 +75,7 @@
     border-radius: var(--roundness-big);
     border: none;
     box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.2);
-    margin: 15% auto; /* 15% from the top and centered */
+    margin: 5vw auto; /* 15% from the top and centered */
     padding: 20px;
     width: 40%; /* Could be more or less, depending on screen size */
   }
@@ -92,6 +92,7 @@
   button {
     cursor: pointer;
     border: none;
+    background-color: var(--light-bg);
   }
 
   .buttons {
@@ -103,5 +104,6 @@
 
   #save {
     background-color: green;
+    color: var(--light);
   }
 </style>

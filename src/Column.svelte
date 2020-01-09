@@ -23,7 +23,9 @@
 </script>
 
 <div class="column">
-  <div class="title">{name.toUpperCase()}</div>
+  <div class="title">
+    <span>{name.toUpperCase()}</span>
+  </div>
   <div class="drag-container" on:drop={dropCard} on:dragover|preventDefault>
     {#each $configs.filter(config => config.state == state) as item}
       <!-- {#if item.state == state} -->
@@ -36,22 +38,23 @@
 <style>
   .column {
     grid-row: 1;
-    margin: 10px;
-    padding: 20px;
     /*  min-width: 350px; */
     min-height: 600px;
   }
 
   .title {
-    font-size: 200%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2vw;
     font-weight: 900;
     text-align: center;
     border: 2px solid var(--primary-text-color);
     color: var(--primary-text-color);
     border-radius: 10px;
-    margin-bottom: 50px;
-    padding: 20px;
-    height: 100px;
+    margin-bottom: 1vw;
+    padding: auto;
+    min-height: 5vw;
   }
 
   .drag-container {

@@ -198,31 +198,44 @@
   };
 </script>
 
-<div>
-  <button on:click={selectPath}>Pfad auswählen</button>
-  <span>
-    Ausgewählter Ordner:
-    <span class="underline" on:click={openSessionFolder}>{$sessionPath}</span>
-  </span>
-
-  {#if modalActive}
-    <ConfigModal
-      on:toggle={toggleModal}
-      on:create={createConfigs}
-      paths={pathsToCreate}
-      bind:selected={selectedPaths} />
-  {/if}
-
+<div class="filemanager">
+  <span class="underline" on:click={openSessionFolder}>{$sessionPath}</span>
+  <img
+    src="../public/images/settings.svg"
+    alt="Pfad auswählen Logo"
+    title="Pfad auswählen"
+    on:click={selectPath}
+    class="invert" />
 </div>
 
+{#if modalActive}
+  <ConfigModal
+    on:toggle={toggleModal}
+    on:create={createConfigs}
+    paths={pathsToCreate}
+    bind:selected={selectedPaths} />
+{/if}
+
 <style>
-  button {
-    margin: 30px;
+  .filemanager {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  img {
     cursor: pointer;
+    width: 3vw;
+  }
+
+  img:hover {
+    opacity: 0.5;
   }
 
   span {
     color: var(--primary-text-color);
+    margin: 0 1vw;
   }
 
   .underline {

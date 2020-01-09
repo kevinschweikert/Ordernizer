@@ -58,8 +58,8 @@
   .item {
     color: var(--primary-text-color);
     background-color: var(--card-bg);
-    margin: 20px 20px;
-    padding: 40px;
+    margin: 1vw;
+    padding: 1vw;
     cursor: pointer;
     user-select: none;
     box-shadow: var(--shadow);

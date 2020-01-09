@@ -44,17 +44,24 @@
 <div class="files" title="Open File">
   {#if fileData.length > 0}
     {#each fileData as data}
-      {#if data.format.localeCompare('jpg') == 0 || data.format.localeCompare('png') == 0}
-        <img src="../public/images/image.svg" alt="image icon" />
-      {:else if data.format.localeCompare('pdf') == 0}
-        <img src="../public/images/pdf.svg" alt="pdf icon" />
-      {:else}
-        <img src="../public/images/file.svg" alt="file icon" />
-      {/if}
-
-      <span class="name" on:click={() => openItem(data.name, data.format)}>
-        {data.name}
-      </span>
+      <div class="file">
+        <div class="format">
+          {#if data.format.localeCompare('jpg') == 0 || data.format.localeCompare('png') == 0}
+            <img src="../public/images/image.svg" alt="image icon" />
+          {:else if data.format.localeCompare('pdf') == 0}
+            <img src="../public/images/pdf.svg" alt="pdf icon" />
+          {:else}
+            <img src="../public/images/file.svg" alt="file icon" />
+          {/if}
+        </div>
+        <div class="name">
+          <span
+            title={data.name}
+            on:click={() => openItem(data.name, data.format)}>
+            {data.name}
+          </span>
+        </div>
+      </div>
     {/each}
   {:else}
     <p>Keine Dateien vorhanden</p>
@@ -65,23 +72,38 @@
 <style>
   .files {
     display: grid;
-    grid-template-columns: 30px auto;
-    grid-gap: 10px;
+    grid-template-rows: 1fr;
+    grid-gap: 5px;
+  }
+
+  .file {
+    display: grid;
+    grid-template-columns: 1.5vw auto;
+    grid-gap: 5px;
+    border-radius: 5px;
+    background-color: var(--light-bg);
+    padding: 5px 2px;
+    width: 100%;
   }
 
   .name {
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  span {
     cursor: pointer;
     font-size: 80%;
-    border-radius: 5px;
-    padding: 10px;
-    background-color: var(--light-bg);
+    text-overflow: ellipsis;
+    white-space: nowrap;
     overflow: hidden;
-    overflow-wrap: break-word;
-    word-wrap: break-word;
+    text-align: left;
   }
 
   img {
-    width: 25px;
+    height: 1.5vw;
   }
 
   #folder {
@@ -95,5 +117,15 @@
     background-color: var(--card-bg);
     border: 1px solid black;
     margin: 20px 0;
+  }
+
+  @media screen and (max-width: 1300px) {
+    .format {
+      display: none;
+    }
+
+    .file {
+      grid-template-columns: auto;
+    }
   }
 </style>

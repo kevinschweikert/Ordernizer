@@ -136,9 +136,11 @@
 
   #save {
     background-color: green;
+    color: var(--light);
   }
 
   button {
+    background-color: var(--light-bg);
     border: none;
   }
 </style>
