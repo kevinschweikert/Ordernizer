@@ -18,26 +18,9 @@
   const toggleModal = () => {
     modalActive = !modalActive;
   };
-
-  /* const dragStart = () => {
-    setTimeout(() => {
-      $activeElement = [];
-      let newConfig = $configs.filter(config => {
-        if (config.id == id) {
-          $activeElement = config;
-          return false;
-        } else {
-          return true;
-        }
-      });
-      $configs = newConfig;
-    }, 1);
-  }; */
 </script>
 
-<div
-  class="item"
-  data-id={id}>
+<div class="item" data-id={id} on:click={toggleModal}>
   <h3>{project}</h3>
   <div class="desription">
     Beschreibung:
@@ -48,7 +31,7 @@
 </div>
 
 {#if modalActive}
-  <Modal {project} {desc} {files} {path} {id} on:toggle={toggleModal} />
+  <Modal {project} {desc} {files} {path} {id} {state} on:toggle={toggleModal} />
 {/if}
 
 <style>

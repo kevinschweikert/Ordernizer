@@ -46,24 +46,26 @@
         jetpack
           .dir($sessionPath)
           .dir(path)
-          .write($cfgFileName, createConfig(path, path, files, ""), {
-            atomic: true
-          });
+          .write($cfgFileName, createConfig(path, path, files, ""));
       });
     }
     toggleModal();
   };
 
   const createWatcher = watchPath => {
-    watcher = chokidar.watch(watchPath, { ignoreInitial: true });
+    watcher = chokidar.watch(watchPath, {
+      ignoreInitial: true,
+      ignored: /(^|[\/\\])\../, // ignore dotfiles
+      depth: 2
+    });
     watcher
       .on("change", changePath => {
-        //check is file write was own
         if ($noChange) {
           $noChange = false;
         } else {
           if (jetpack.inspect(changePath).name == $cfgFileName) {
             const changed = jetpack.read(changePath, "json");
+            console.log("changed: " + changed.project);
             $configs = $configs.map(conf =>
               conf.id == changed.id ? changed : conf
             );
@@ -73,6 +75,7 @@
       .on("add", changePath => {
         if (jetpack.inspect(changePath).name == $cfgFileName) {
           const added = jetpack.read(changePath, "json");
+          console.log("Added:" + added.project);
           $configs = [...$configs, added];
         } else {
           const dirPath = path.dirname(changePath);
@@ -88,6 +91,7 @@
         }
       })
       .on("unlink", changePath => {
+        console.log("unlink");
         if (path.basename(changePath) == $cfgFileName) {
           updateData($sessionPath);
         } else {
@@ -103,7 +107,11 @@
           );
         }
       })
-      .on("addDir", changePath => updateData($sessionPath))
+      .on("addDir", changePath => {
+        if (!jetpack.dir(changePath).exists($cfgFileName)) {
+          updateData($sessionPath);
+        }
+      })
       .on("unlinkDir", changePath => updateData($sessionPath))
       .on("error", error => console.error(error));
   };
@@ -146,7 +154,7 @@
         jetpack
           .dir(folderPath)
           .dir(folder.name)
-          .write($cfgFileName, config, { atomic: true });
+          .write($cfgFileName, config);
         $configs = [...$configs, config];
       } else {
         modalActive = true;
@@ -176,7 +184,10 @@
     if (jetpack.dir(folderPath[0]).exists($mainFileName)) {
       $sessionPath = folderPath[0];
       store.set("defaultPath", $sessionPath);
-      updateData($sessionPath);
+      watcher.close().then(() => {
+        watcher = false;
+        updateData($sessionPath);
+      });
     } else {
       alert(
         "Der ausgewählte Ordner enthält keine Datei mit dem Namen: '" +

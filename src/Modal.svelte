@@ -9,6 +9,7 @@
   export let files;
   export let path;
   export let id;
+  export let state;
 
   const dispatcher = createEventDispatcher();
 
@@ -23,7 +24,21 @@
     jetpack
       .dir($sessionPath)
       .dir(path)
-      .write($cfgFileName, config, { atomic: true });
+      .write($cfgFileName, config);
+    toggle();
+  };
+
+  const archive = () => {
+    const date = new Date();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = String(date.getFullYear());
+    const archiveFolderPath = jetpack
+      .dir($sessionPath)
+      .dir("..")
+      .dir("Archive")
+      .dir(year)
+      .dir([year, month, path].join("_"));
+    jetpack.dir($sessionPath).move(path, archiveFolderPath.cwd());
     toggle();
   };
 </script>
@@ -47,6 +62,10 @@
       <Files {files} {project} projectPath={path} />
     </div>
     <div class="buttons">
+      {#if state == 'geliefert'}
+        <button on:click={archive} id="archive">Archivieren</button>
+        <!-- content here -->
+      {/if}
       <button on:click={toggle}>Abbrechen</button>
       <button id="save" on:click={save}>Speichern</button>
     </div>
@@ -85,6 +104,11 @@
     min-height: 100px;
   }
 
+  #archive {
+    background-color: darkred;
+    color: var(--light);
+  }
+
   input {
     width: 100%;
   }
@@ -98,7 +122,8 @@
   .buttons {
     margin-top: 50px;
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-auto-columns: auto;
+    grid-auto-flow: column;
     grid-gap: 30px;
   }
 

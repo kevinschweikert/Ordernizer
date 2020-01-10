@@ -5,6 +5,7 @@
   export let paths = [];
   export let selected = [];
   $: buttonText = selected.length == 0 ? "Abbrechen" : "Anlegen";
+  $: paths = [...new Set(paths)];
 
   const dispatcher = createEventDispatcher();
 
@@ -32,7 +33,9 @@
         {path}
       </label>
     {/each}
-    <button on:click={createConfigs}>{buttonText}</button>
+    <p>
+      <button on:click={createConfigs}>{buttonText}</button>
+    </p>
 
   </div>
 

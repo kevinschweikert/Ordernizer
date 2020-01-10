@@ -1,11 +1,12 @@
 # Ordernizer
+
 ![Ordernizer Logo](./public/256x256.png)
 
 This is an app that helps to keep track of our orders at university
 
 ## Download
 
-Go to the 
+Go to the
 [Release Page](https://github.com/kevinschweikert/Ordernizer/releases/)
 and there you can download the latest build.
 
@@ -45,11 +46,11 @@ Click on the Logo or Heading to toggle light and dark theme. The settig will be 
 - [x] Translate Interface to german
 - [x] check for ".ordernizer" file in main folder to prevent wrong paths
 - [x] HTML validate input when entering new project name
-- [ ] Remove double card when new Project is added
-- [ ] Make Cards sortable, animate and remember vertical position
-- [ ] Make sure folder ist updated when path is changed
-- [ ] Change resolution of main window and app
+- [x] Remove double card when new Project is added
+- [x] Make Cards sortable, animate and remember vertical position
+- [x] Make sure folder ist updated when path is changed
+- [x] Change resolution of main window and app
 - [ ] Option to archive project
-- [ ] Create animations for cards
+- [x] Create animations for cards
 - [x] Dark Mode
 - [ ] OPTIONAL: add username field
