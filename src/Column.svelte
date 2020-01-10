@@ -2,6 +2,8 @@
   import { configs, sessionPath, cfgFileName } from "./configs";
   import { activeElement, noChange } from "./active";
   import Card from "./Card.svelte";
+  import Sortable from "sortablejs";
+  import {onMount} from "svelte"
 
   const jetpack = require("fs-jetpack");
 
@@ -9,8 +11,16 @@
   export let state;
 
   let newProjectName = "";
+  let column;
 
-  const dropCard = () => {
+  onMount(() => {
+    let sortable = Sortable.create(column, {
+      group: "orders",
+      animation: 100
+    })
+  })
+
+  /* const dropCard = () => {
     $activeElement.state = state;
     $noChange = true;
     jetpack
@@ -19,14 +29,14 @@
       .write($cfgFileName, $activeElement, { atomic: true });
     $configs = [...$configs, $activeElement];
     $activeElement = [];
-  };
+  }; */
 </script>
 
 <div class="column">
   <div class="title">
     <span>{name.toUpperCase()}</span>
   </div>
-  <div class="drag-container" on:drop={dropCard} on:dragover|preventDefault>
+  <div class="drag-container" data-state={state} bind:this={column}>
     {#each $configs.filter(config => config.state == state) as item}
       <!-- {#if item.state == state} -->
       <Card {...item} />

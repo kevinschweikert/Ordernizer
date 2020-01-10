@@ -19,7 +19,7 @@
     modalActive = !modalActive;
   };
 
-  const dragStart = () => {
+  /* const dragStart = () => {
     setTimeout(() => {
       $activeElement = [];
       let newConfig = $configs.filter(config => {
@@ -32,15 +32,12 @@
       });
       $configs = newConfig;
     }, 1);
-  };
+  }; */
 </script>
 
 <div
   class="item"
-  draggable="true"
-  on:click={toggleModal}
-  on:dragstart={dragStart}
-  on:dragover|preventDefault>
+  data-id={id}>
   <h3>{project}</h3>
   <div class="desription">
     Beschreibung:
