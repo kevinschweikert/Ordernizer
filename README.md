@@ -50,7 +50,15 @@ Click on the Logo or Heading to toggle light and dark theme. The settig will be 
 - [x] Make Cards sortable, animate and remember vertical position
 - [x] Make sure folder ist updated when path is changed
 - [x] Change resolution of main window and app
-- [ ] Option to archive project
+- [x] Option to archive project
 - [x] Create animations for cards
 - [x] Dark Mode
-- [ ] OPTIONAL: add username field
+
+## BUGFIXES
+
+- [ ] sort order is not remembered with reload
+- [ ] no drop preview if you want to drop it in empty column area
+
+## IDEAS
+
+- add username field
