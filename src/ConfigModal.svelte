@@ -32,6 +32,7 @@
         <input type="checkbox" bind:group={selected} value={path} />
         {path}
       </label>
+      <br />
     {/each}
     <p>
       <button on:click={createConfigs}>{buttonText}</button>
@@ -62,6 +63,11 @@
     box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.2);
     margin: 15% auto; /* 15% from the top and centered */
     padding: 20px;
-    width: 300px; /* Could be more or less, depending on screen size */
+    width: 50%; /* Could be more or less, depending on screen size */
+  }
+
+  input {
+    transform: scale(2);
+    margin: 10px;
   }
 </style>

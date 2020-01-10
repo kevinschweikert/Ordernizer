@@ -6,7 +6,6 @@
     createConfig,
     mainFileName
   } from "./configs";
-  import { noChange } from "./active.js";
   import { onDestroy } from "svelte";
   import ConfigModal from "./ConfigModal.svelte";
 
@@ -60,16 +59,11 @@
     });
     watcher
       .on("change", changePath => {
-        if ($noChange) {
-          $noChange = false;
-        } else {
-          if (jetpack.inspect(changePath).name == $cfgFileName) {
-            const changed = jetpack.read(changePath, "json");
-            console.log("changed: " + changed.project);
-            $configs = $configs.map(conf =>
-              conf.id == changed.id ? changed : conf
-            );
-          }
+        if (jetpack.inspect(changePath).name == $cfgFileName) {
+          const changed = jetpack.read(changePath, "json");
+          $configs = $configs.map(conf =>
+            conf.id == changed.id ? changed : conf
+          );
         }
       })
       .on("add", changePath => {

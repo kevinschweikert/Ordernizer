@@ -1,4 +1,4 @@
 import { writable } from "svelte/store";
 
-export const activeElement = writable();
-export const noChange = writable(false);
+export const activeElement = writable(null);
+export const hoverElement = writable(null)
