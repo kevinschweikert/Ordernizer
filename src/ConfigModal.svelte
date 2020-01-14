@@ -48,15 +48,16 @@
     width: 100%; /* Full width */
     height: 100%; /* Full height */
     overflow: auto; /* Enable scroll if needed */
-    background-color: rgba(0, 0, 0, 0.2); /* Black w/ opacity */
+    background-color: rgba(0, 0, 0, 0.5); /* Black w/ opacity */
   }
 
   /* Modal Content/Box */
   .modal-content {
-    background-color: #fefefe;
-    border-radius: 10px;
+    background-color:var(--card-bg);
+    color: var(--primary-text-color);
+    border-radius: var(--roundness-big);
     border: none;
-    box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.2);
+    box-shadow: var(--shadow);
     margin: 15% auto; /* 15% from the top and centered */
     padding: 20px;
     width: 300px; /* Could be more or less, depending on screen size */
