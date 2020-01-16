@@ -14,6 +14,7 @@
   export let desc;
   export let files;
   export let sortOrder;
+  export let lastCard = false
 
   let activeItem = "";
   let modalActive = false;
@@ -23,8 +24,22 @@
   let wrapper;
 
   const [send, receive] = crossfade({
-    duration: d => Math.sqrt(d * 200)
-  });
+		duration: d => Math.sqrt(d * 200),
+
+		fallback(node, params) {
+			const style = getComputedStyle(node);
+			const transform = style.transform === 'none' ? '' : style.transform;
+
+			return {
+				duration: 600,
+				easing: quintOut,
+				css: t => `
+					transform: ${transform} scale(${t});
+					opacity: ${t}
+				`
+			};
+		}
+	});
 
   const toggleModal = () => {
     modalActive = !modalActive;
@@ -35,7 +50,7 @@
   };
 
   const setHover = e => {
-    $hoverElement = { state: state, sortOrder: sortOrder };
+    $hoverElement = { state: state, sortOrder: sortOrder, type: "card" };
   };
 
   const dragEnter = () => {
@@ -61,7 +76,7 @@
   on:dragend={() => (spacer = false)}
   on:drop={() => (spacer = false)}>
   {#if spacer}
-    <div class="dropper" />
+    <div class="dropper"> {$activeElement.project} </div>
   {/if}
   <div
     bind:this={item}
@@ -73,6 +88,8 @@
     on:dragover|preventDefault={setHover}>
 
     <h3>{project}</h3>
+    <h4>{sortOrder}</h4>
+    <h4>{id}</h4>
     <div class="desription">
       Beschreibung:
       <p>{desc}</p>
@@ -80,6 +97,9 @@
     <p>Dateien:</p>
     <Files {files} />
   </div>
+  {#if $hoverElement.type == "column" && $hoverElement.state == state && lastCard}
+    <div class="dropper"> {$activeElement.project} </div>
+  {/if}
 </div>
 
 {#if modalActive}
@@ -112,10 +132,12 @@
   }
 
   .dropper {
-    height: 20px;
+    height: 100%;
     background-color: var(--primary-text-color);
     border-radius: var(--roundness-small);
     margin: 0.5vw 1vw;
+    padding: 10px;
     opacity: 0.5;
+    color: var(--button-bg)
   }
 </style>
