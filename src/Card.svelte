@@ -13,7 +13,6 @@
   export let state;
   export let desc;
   export let files;
-  export let sortOrder;
   export let lastCard = false
 
   let activeItem = "";
@@ -50,7 +49,7 @@
   };
 
   const setHover = e => {
-    $hoverElement = { state: state, sortOrder: sortOrder, type: "card" };
+    $hoverElement = { state: state, type: "card", id: id };
   };
 
   const dragEnter = () => {
@@ -88,8 +87,6 @@
     on:dragover|preventDefault={setHover}>
 
     <h3>{project}</h3>
-    <h4>{sortOrder}</h4>
-    <h4>{id}</h4>
     <div class="desription">
       Beschreibung:
       <p>{desc}</p>
