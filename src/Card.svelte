@@ -1,8 +1,11 @@
 <script>
   import { configs, sessionPath, cfgFileName } from "./configs";
-  import { activeElement } from "./active";
+  import { activeElement, hoverElement } from "./active";
   import Modal from "./Modal.svelte";
   import Files from "./Files.svelte";
+  import { onMount } from "svelte";
+  import { quintOut } from "svelte/easing";
+  import { crossfade } from "svelte/transition";
 
   export let id;
   export let path;
@@ -10,48 +13,94 @@
   export let state;
   export let desc;
   export let files;
+  export let lastCard = false
 
   let activeItem = "";
   let modalActive = false;
-  let fd;
+  let item;
+  let spacer = false;
+  let upperHalf = false;
+  let wrapper;
+
+  const [send, receive] = crossfade({
+		duration: d => Math.sqrt(d * 200),
+
+		fallback(node, params) {
+			const style = getComputedStyle(node);
+			const transform = style.transform === 'none' ? '' : style.transform;
+
+			return {
+				duration: 600,
+				easing: quintOut,
+				css: t => `
+					transform: ${transform} scale(${t});
+					opacity: ${t}
+				`
+			};
+		}
+	});
 
   const toggleModal = () => {
     modalActive = !modalActive;
   };
 
   const dragStart = () => {
-    setTimeout(() => {
-      $activeElement = [];
-      let newConfig = $configs.filter(config => {
-        if (config.id == id) {
-          $activeElement = config;
-          return false;
-        } else {
-          return true;
-        }
-      });
-      $configs = newConfig;
-    }, 1);
+    $activeElement = $configs.filter(config => config.id == id)[0];
+  };
+
+  const setHover = e => {
+    $hoverElement = { state: state, type: "card", id: id };
+  };
+
+  const dragEnter = () => {
+    if ($activeElement.id != id) {
+      spacer = true;
+    }
+  };
+
+  const dragLeave = e => {
+    if (!wrapper.contains(e.relatedTarget) && $activeElement.id != id) {
+      spacer = false;
+    }
   };
 </script>
 
 <div
-  class="item"
-  draggable="true"
-  on:click={toggleModal}
-  on:dragstart={dragStart}
-  on:dragover|preventDefault>
-  <h3>{project}</h3>
-  <div class="desription">
-    Beschreibung:
-    <p>{desc}</p>
+  in:receive={{ key: id }}
+  out:send={{ key: id }}
+  bind:this={wrapper}
+  class="wrapper"
+  on:dragleave={dragLeave}
+  on:dragenter={dragEnter}
+  on:dragend={() => (spacer = false)}
+  on:drop={() => (spacer = false)}>
+  {#if spacer}
+    <div class="dropper"> {$activeElement.project} </div>
+  {/if}
+  <div
+    bind:this={item}
+    class="item"
+    draggable="true"
+    on:click={toggleModal}
+    on:dragstart={dragStart}
+    on:drop={() => (spacer = false)}
+    on:dragover|preventDefault={setHover}>
+
+    <h3>{project}</h3>
+    <div class="desription">
+      Beschreibung:
+      <p>{desc}</p>
+    </div>
+    <p>Dateien:</p>
+    <Files {files} />
   </div>
-  <p>Dateien:</p>
-  <Files {files} />
+  {#if $hoverElement.type == "column" && $hoverElement.state == state && lastCard}
+    <div class="dropper"> {$activeElement.project} </div>
+  {/if}
 </div>
 
 {#if modalActive}
-  <Modal {project} {desc} {files} {path} {id} on:toggle={toggleModal} />
+  <Modal {project} {desc} {files} {path} {id} {state} on:toggle={toggleModal} />
 {/if}
 
 <style>
@@ -77,5 +126,15 @@
 
   p {
     white-space: pre-wrap;
+  }
+
+  .dropper {
+    height: 100%;
+    background-color: var(--primary-text-color);
+    border-radius: var(--roundness-small);
+    margin: 0.5vw 1vw;
+    padding: 10px;
+    opacity: 0.5;
+    color: var(--button-bg)
   }
 </style>

@@ -36,7 +36,7 @@
       jetpack
         .dir($sessionPath)
         .dir(project.replace(/\s/g, "_"))
-        .write($cfgFileName, config, { atomic: true });
+        .write($cfgFileName, config);
       toggle();
       submitClicked = false;
     }
@@ -47,40 +47,38 @@
 
   <!-- Modal content -->
   <div class="modal-content" on:click|preventDefault|stopPropagation>
-    <form>
 
-      <label for="projektname">Projektname</label>
-      <input
-        type="text"
-        bind:value={project}
-        id="projektname"
-        placeholder="Gebe einen Projektnamen ein"
-        required
-        pattern="[a-zäöüA-Z0-9_\s]+" />
-      <span class="warning" />
+    <label for="projektname">Projektname</label>
+    <input
+      type="text"
+      bind:value={project}
+      id="projektname"
+      placeholder="Gebe einen Projektnamen ein"
+      required
+      pattern="[a-zäöüA-Z0-9_\s]+" />
+    <span class="warning" />
 
-      {#if nameWarning}
-        <p class="warning">
-          Name existiert bereits. Wählen Sie einen anderen Namen
-        </p>
-      {/if}
-      {#if emptyWarning}
-        <p class="warning">Der Projektname darf nicht leer bleiben</p>
-      {/if}
+    {#if nameWarning}
+      <p class="warning">
+        Name existiert bereits. Wählen Sie einen anderen Namen
+      </p>
+    {/if}
+    {#if emptyWarning}
+      <p class="warning">Der Projektname darf nicht leer bleiben</p>
+    {/if}
 
-      <label for="desc">Beschreibung:</label>
-      <textarea
-        name="description"
-        id="desc"
-        bind:value={desc}
-        placeholder="Gebe eine kurze Beschreibung ein" />
+    <label for="desc">Beschreibung:</label>
+    <textarea
+      name="description"
+      id="desc"
+      bind:value={desc}
+      placeholder="Gebe eine kurze Beschreibung ein" />
 
-      <div>
-        <button on:click={toggle}>Abbrechen</button>
-        <button on:click={save} id="save">Speichern</button>
-      </div>
+    <div>
+      <button on:click={toggle}>Abbrechen</button>
+      <button on:click={save} id="save">Speichern</button>
+    </div>
 
-    </form>
   </div>
 
 </div>

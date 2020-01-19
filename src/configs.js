@@ -24,6 +24,6 @@ export const createConfig = (
     project: projectName,
     state: "angebot",
     desc: description,
-    files: additionalFiles
+    files: additionalFiles,
   };
 };

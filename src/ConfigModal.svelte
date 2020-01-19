@@ -5,6 +5,7 @@
   export let paths = [];
   export let selected = [];
   $: buttonText = selected.length == 0 ? "Abbrechen" : "Anlegen";
+  $: paths = [...new Set(paths)];
 
   const dispatcher = createEventDispatcher();
 
@@ -31,8 +32,11 @@
         <input type="checkbox" bind:group={selected} value={path} />
         {path}
       </label>
+      <br />
     {/each}
-    <button on:click={createConfigs}>{buttonText}</button>
+    <p>
+      <button on:click={createConfigs}>{buttonText}</button>
+    </p>
 
   </div>
 
@@ -60,6 +64,11 @@
     box-shadow: var(--shadow);
     margin: 15% auto; /* 15% from the top and centered */
     padding: 20px;
-    width: 300px; /* Could be more or less, depending on screen size */
+    width: 50%; /* Could be more or less, depending on screen size */
+  }
+
+  input {
+    transform: scale(2);
+    margin: 10px;
   }
 </style>
