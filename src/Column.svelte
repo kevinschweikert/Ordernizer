@@ -23,17 +23,20 @@
   if (!Array.prototype.sortByArray){
     Array.prototype.sortByArray = function(keyArray){
 
-      if (this != []) {
-
+      if (Array.isArray(this)) {
         let array = []
         keyArray.forEach(key => {
-          array.push(this.find(item => item.id == key))
-        })
-        this.forEach(item => {
-          if(!array.some(newItem => newItem.id == item.id)) {
-            array.push(item)
+          if (this.some(item => item.id == key)) {
+            array.push(this.find(item => item.id == key))
           }
         })
+        if (array.length > 0) {
+          this.forEach(item => {
+            if(!array.some(newItem => newItem.id == item.id)) {
+              array.push(item)
+            }
+          })
+        }
         return array
       }
 
