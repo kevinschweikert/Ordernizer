@@ -3,7 +3,7 @@
   import { activeElement, hoverElement } from "./active";
   import Card from "./Card.svelte";
   import Empty from "./Empty.svelte"
-  import { onMount, afterUpdate } from "svelte";
+  import { onMount, beforeUpdate } from "svelte";
   import { flip } from "svelte/animate";
 
   const jetpack = require("fs-jetpack");
@@ -22,22 +22,29 @@
   };
   if (!Array.prototype.sortByArray){
     Array.prototype.sortByArray = function(keyArray){
-        if (this.length == keyArray.length) {
-          let array = []
-          keyArray.forEach((item) => {
-            array.push(this.filter(i => i.id == item)[0])
-          })
-          return array
-        }
-        console.error("both arrays must be same size")
-        return this
+
+      if (this != []) {
+
+        let array = []
+        keyArray.forEach(key => {
+          array.push(this.find(item => item.id == key))
+        })
+        this.forEach(item => {
+          if(!array.some(newItem => newItem.id == item.id)) {
+            array.push(item)
+          }
+        })
+        return array
+      }
+
     };
   };
+
 
   onMount(() => {
 
     if (getOrdering(state)) {
-      sortArray(items, getOrdering(state))
+      items.sortByArray(getOrdering(state))
     }
     else {
       let array = []
@@ -45,29 +52,13 @@
         array.push(item.id)
       })
       localStorage.setItem(state, JSON.stringify(array))
+      items.sortByArray(getOrdering(state))
     }
-
-    items = sortArray(items, getOrdering(state))
 
   })
 
-
   const getOrdering = (columnState) => {
     return JSON.parse(localStorage.getItem(columnState))
-  }
-
-  const sortArray = (itemsArray, orderingArray) => {
-    if (itemsArray.length != orderingArray.length) {
-      console.log("Unequal size!")
-      return itemsArray
-    } else {
-        let sortedArray = []
-      orderingArray.forEach(orderID => {
-        sortedArray.push(itemsArray.filter(item => item.id == orderID)[0])
-      })
-      return sortedArray
-    }
-    
   }
 
   const removeFromSortingArray = (item) => {
@@ -76,13 +67,15 @@
     localStorage.setItem(item.state, JSON.stringify(array))
   }
 
-  const insertIntoSortingArray = (index, item) => {
+  const insertIntoSortingArray = (id, item) => {
     let array = JSON.parse(localStorage.getItem(state))
-    if (index == 0) {
-      array.unshift(item.id)
+
+    if (id) {
+      array.splice(array.indexOf(id), 0, item.id)
     } else {
-      array.splice(index, 0, item.id)
+      array.push(item.id)
     }
+
     localStorage.setItem(state, JSON.stringify(array))
   }
 
@@ -94,12 +87,7 @@
     // add item id to new sorting array
     if ($hoverElement.state) {
       if (state == $hoverElement.state) {
-        if ($hoverElement.type == "card") {
-          insertIntoSortingArray($hoverElement.sortOrder, $activeElement)
-        }
-        else {
-          insertIntoSortingArray(getOrdering(state).length -1, $activeElement)
-        }
+        insertIntoSortingArray($hoverElement.id, $activeElement)
       }
     }
 
@@ -110,14 +98,11 @@
       .dir($activeElement.path)
       .write($cfgFileName, $activeElement);
 
-    //items = sortArray(items, getOrdering(state))
-
-    $hoverElement= {state: null, type: null, sortOrder: null}
+    $hoverElement= {state: null, type: null, id: null}
   };
 
   $: {
     items = $configs.filter(config => config.state == state).sortByArray(getOrdering(state))
-    //sortArray(items, getOrdering(state))
   }
 
 
@@ -132,7 +117,7 @@
   <div class="drag-container" on:drop={dropCard} on:dragover|preventDefault>
     {#each items as item, index (item.id)}
       <div animate:flip={{ duration: 200 }}>
-        <Card {...item} sortOrder = {index} lastCard={item.id == items.last().id ? true : false}/>
+        <Card {...item} lastCard={item.id == items.last().id ? true : false}/>
       </div>
     {/each}
     <Empty {state}/>
@@ -142,7 +127,6 @@
 <style>
   .column {
     grid-row: 1;
-    /*  min-width: 350px; */
     min-height: 600px;
   }
 
