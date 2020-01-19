@@ -3,7 +3,6 @@
   "description": "Application to organize the order process in a kanban/Trello style",
   "version": "0.6.0",
   "main": "./src/electron.js",
-  "license": "MIT",
   "author": "Kevin Schweikert <info@kevinschweikert.de> (http://kevinschweikert.de)",
   "devDependencies": {
     "@rollup/plugin-commonjs": "^11.0.1",
