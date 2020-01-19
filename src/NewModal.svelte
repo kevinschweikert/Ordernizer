@@ -10,6 +10,7 @@
   let nameWarning = false;
   let emptyWarning = false;
   let submitClicked = false;
+  let forbiddenCharacter = false;
 
   const dispatcher = createEventDispatcher();
 
@@ -23,10 +24,11 @@
   $: project == "" && submitClicked
     ? (emptyWarning = true)
     : (emptyWarning = false);
+  $: project.match("[^a-zäöüA-Z0-9_\s]") ? forbiddenCharacter = true : forbiddenCharacter = false
 
   const save = () => {
     submitClicked = true;
-    if (!nameWarning && !emptyWarning) {
+    if (!nameWarning && !emptyWarning && !forbiddenCharacter) {
       const config = createConfig(
         project,
         path.join($sessionPath, project.replace(/\s/g, "_")),
@@ -47,7 +49,7 @@
 
   <!-- Modal content -->
   <div class="modal-content" on:click|preventDefault|stopPropagation>
-
+    <p>
     <label for="projektname">Projektname</label>
     <input
       type="text"
@@ -57,7 +59,7 @@
       required
       pattern="[a-zäöüA-Z0-9_\s]+" />
     <span class="warning" />
-
+    </p>
     {#if nameWarning}
       <p class="warning">
         Name existiert bereits. Wählen Sie einen anderen Namen
@@ -66,14 +68,14 @@
     {#if emptyWarning}
       <p class="warning">Der Projektname darf nicht leer bleiben</p>
     {/if}
-
+    <p>
     <label for="desc">Beschreibung:</label>
     <textarea
       name="description"
       id="desc"
       bind:value={desc}
       placeholder="Gebe eine kurze Beschreibung ein" />
-
+    </p>
     <div>
       <button on:click={toggle}>Abbrechen</button>
       <button on:click={save} id="save">Speichern</button>
@@ -93,7 +95,7 @@
     width: 100%; /* Full width */
     height: 100%; /* Full height */
     overflow: auto; /* Enable scroll if needed */
-    background-color: rgba(0, 0, 0, 0.2); /* Black w/ opacity */
+    background-color: rgba(0, 0, 0, 0.5); /* Black w/ opacity */
   }
 
   /* Modal Content/Box */
