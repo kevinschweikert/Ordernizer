@@ -4,7 +4,7 @@ export let state;
 
 import { activeElement, hoverElement } from "./active";
     const setHover = e => {
-    $hoverElement = { state: state, sortOrder: null, type: "empty" };
+    $hoverElement = { state: state, type: "empty", id: false };
   };
 
 

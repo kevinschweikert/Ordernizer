@@ -25,6 +25,5 @@ export const createConfig = (
     state: "angebot",
     desc: description,
     files: additionalFiles,
-    sortOrder: 0
   };
 };
