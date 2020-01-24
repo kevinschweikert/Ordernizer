@@ -57,7 +57,7 @@
 
   /* Modal Content/Box */
   .modal-content {
-    background-color:var(--card-bg);
+    background-color: var(--card-bg);
     color: var(--primary-text-color);
     border-radius: var(--roundness-big);
     border: none;

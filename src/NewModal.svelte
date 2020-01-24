@@ -14,7 +14,8 @@
 
   const dispatcher = createEventDispatcher();
 
-  const toggle = () => {
+  const toggle = e => {
+    console.log(e);
     dispatcher("toggle");
   };
 
@@ -24,7 +25,9 @@
   $: project == "" && submitClicked
     ? (emptyWarning = true)
     : (emptyWarning = false);
-  $: project.match("[^a-zäöüA-Z0-9_\s]") ? forbiddenCharacter = true : forbiddenCharacter = false
+  $: project.match("[^a-zäöüA-Z0-9_s]")
+    ? (forbiddenCharacter = true)
+    : (forbiddenCharacter = false);
 
   const save = () => {
     submitClicked = true;
@@ -45,20 +48,26 @@
   };
 </script>
 
-<div id="myModal" class="modal" on:click|preventDefault={toggle}>
+<div
+  id="myModal"
+  class="modal"
+  on:mousedown|preventDefault|stopPropagation={toggle}>
 
   <!-- Modal content -->
-  <div class="modal-content" on:click|preventDefault|stopPropagation>
+  <div
+    class="modal-content"
+    on:click|preventDefault|stopPropagation
+    on:mousedown|stopPropagation>
     <p>
-    <label for="projektname">Projektname</label>
-    <input
-      type="text"
-      bind:value={project}
-      id="projektname"
-      placeholder="Gebe einen Projektnamen ein"
-      required
-      pattern="[a-zäöüA-Z0-9_\s]+" />
-    <span class="warning" />
+      <label for="projektname">Projektname</label>
+      <input
+        type="text"
+        bind:value={project}
+        id="projektname"
+        placeholder="Gebe einen Projektnamen ein"
+        required
+        pattern="[a-zäöüA-Z0-9_\s]+" />
+      <span class="warning" />
     </p>
     {#if nameWarning}
       <p class="warning">
@@ -69,12 +78,12 @@
       <p class="warning">Der Projektname darf nicht leer bleiben</p>
     {/if}
     <p>
-    <label for="desc">Beschreibung:</label>
-    <textarea
-      name="description"
-      id="desc"
-      bind:value={desc}
-      placeholder="Gebe eine kurze Beschreibung ein" />
+      <label for="desc">Beschreibung:</label>
+      <textarea
+        name="description"
+        id="desc"
+        bind:value={desc}
+        placeholder="Gebe eine kurze Beschreibung ein" />
     </p>
     <div>
       <button on:click={toggle}>Abbrechen</button>

@@ -2,7 +2,7 @@
   import { configs, sessionPath, cfgFileName } from "./configs";
   import { activeElement, hoverElement } from "./active";
   import Card from "./Card.svelte";
-  import Empty from "./Empty.svelte"
+  import Empty from "./Empty.svelte";
   import { onMount, beforeUpdate } from "svelte";
   import { flip } from "svelte/animate";
 
@@ -12,88 +12,85 @@
   export let state;
   let items = [];
   let newProjectName = "";
-  let lastID
+  let lastID;
 
-
-  if (!Array.prototype.last){
-    Array.prototype.last = function(){
-        return this[this.length - 1];
+  if (!Array.prototype.last) {
+    Array.prototype.last = function() {
+      return this[this.length - 1];
     };
-  };
-  if (!Array.prototype.sortByArray){
-    Array.prototype.sortByArray = function(keyArray){
-
-      if (Array.isArray(this)) {
-        let array = []
+  }
+  if (!Array.prototype.sortByArray) {
+    Array.prototype.sortByArray = function(keyArray) {
+      if (typeof this !== "undefined") {
+        let array = [];
         keyArray.forEach(key => {
           if (this.some(item => item.id == key)) {
-            array.push(this.find(item => item.id == key))
+            array.push(this.find(item => item.id == key));
           }
-        })
+        });
         if (array.length > 0) {
           this.forEach(item => {
-            if(!array.some(newItem => newItem.id == item.id)) {
-              array.push(item)
+            if (!array.some(newItem => newItem.id == item.id)) {
+              array.push(item);
             }
-          })
+          });
         }
-        return array
+        return array;
+      } else {
+        return this;
       }
-
     };
-  };
-
+  }
 
   onMount(() => {
-
-    if (getOrdering(state)) {
-      items.sortByArray(getOrdering(state))
-    }
-    else {
-      let array = []
+    if (getOrdering(state).length > 0) {
+      items.sortByArray(getOrdering(state));
+    } else {
+      let array = [];
       items.forEach(item => {
-        array.push(item.id)
-      })
-      localStorage.setItem(state, JSON.stringify(array))
-      items.sortByArray(getOrdering(state))
+        array.push(item.id);
+      });
+      localStorage.setItem(state, JSON.stringify(array));
+      items.sortByArray(getOrdering(state));
     }
+  });
 
-  })
+  const getOrdering = columnState => {
+    const storedKeys = JSON.parse(localStorage.getItem(columnState));
+    if (storedKeys != null) {
+      return storedKeys;
+    } else {
+      return [];
+    }
+  };
 
-  const getOrdering = (columnState) => {
-    return JSON.parse(localStorage.getItem(columnState))
-  }
-
-  const removeFromSortingArray = (item) => {
-    let array = JSON.parse(localStorage.getItem(item.state))
-    array = array.filter(id => id != item.id)
-    localStorage.setItem(item.state, JSON.stringify(array))
-  }
+  const removeFromSortingArray = item => {
+    let array = JSON.parse(localStorage.getItem(item.state));
+    array = array.filter(id => id != item.id);
+    localStorage.setItem(item.state, JSON.stringify(array));
+  };
 
   const insertIntoSortingArray = (id, item) => {
-    let array = JSON.parse(localStorage.getItem(state))
+    let array = JSON.parse(localStorage.getItem(state));
 
     if (id) {
-      array.splice(array.indexOf(id), 0, item.id)
+      array.splice(array.indexOf(id), 0, item.id);
     } else {
-      array.push(item.id)
+      array.push(item.id);
     }
 
-    localStorage.setItem(state, JSON.stringify(array))
-  }
-
-
+    localStorage.setItem(state, JSON.stringify(array));
+  };
 
   const dropCard = () => {
     // remove item from old sorting array
-    removeFromSortingArray($activeElement)
+    removeFromSortingArray($activeElement);
     // add item id to new sorting array
     if ($hoverElement.state) {
       if (state == $hoverElement.state) {
-        insertIntoSortingArray($hoverElement.id, $activeElement)
+        insertIntoSortingArray($hoverElement.id, $activeElement);
       }
     }
-
 
     $activeElement.state = state;
     jetpack
@@ -101,16 +98,14 @@
       .dir($activeElement.path)
       .write($cfgFileName, $activeElement);
 
-    $hoverElement= {state: null, type: null, id: null}
+    $hoverElement = { state: null, type: null, id: null };
   };
 
   $: {
-    items = $configs.filter(config => config.state == state).sortByArray(getOrdering(state))
+    items = $configs
+      .filter(config => config.state == state)
+      .sortByArray(getOrdering(state));
   }
-
-
-
-
 </script>
 
 <div class="column">
@@ -120,24 +115,19 @@
   <div class="drag-container" on:drop={dropCard} on:dragover|preventDefault>
     {#each items as item, index (item.id)}
       <div animate:flip={{ duration: 200 }}>
-        <Card {...item} lastCard={item.id == items.last().id ? true : false}/>
+        <Card {...item} lastCard={item.id == items.last().id ? true : false} />
       </div>
     {/each}
-    <Empty {state}/>
+    <Empty {state} />
   </div>
 </div>
 
 <style>
-  .column {
-    grid-row: 1;
-    min-height: 600px;
-  }
-
   .title {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 2vw;
+    font-size: calc(10px + 1vw);
     font-weight: 900;
     text-align: center;
     border: 2px solid var(--primary-text-color);
@@ -146,6 +136,8 @@
     margin-bottom: 1vw;
     padding: auto;
     min-height: 5vw;
+    user-select: none;
+    min-height: 7vw;
   }
 
   .drag-container {

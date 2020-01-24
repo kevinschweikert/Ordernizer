@@ -36,9 +36,7 @@
 </script>
 
 {#if project}
-  <button on:click={showInFolder} title="Open Folder">
-    <img id="folder" src="../public/images/folder.svg" alt="folder icon" />
-  </button>
+  <button on:click={showInFolder} title="Ordner öffnen">Ordner öffnen</button>
 {/if}
 
 <div class="files" title="Open File">
@@ -47,11 +45,11 @@
       <div class="file">
         <div class="format">
           {#if data.format.localeCompare('jpg') == 0 || data.format.localeCompare('png') == 0}
-            <img src="../public/images/image.svg" alt="image icon" />
+            <img src="../public/assets/image.svg" alt="image icon" />
           {:else if data.format.localeCompare('pdf') == 0}
-            <img src="../public/images/pdf.svg" alt="pdf icon" />
+            <img src="../public/assets/pdf.svg" alt="pdf icon" />
           {:else}
-            <img src="../public/images/file.svg" alt="file icon" />
+            <img src="../public/assets/file.svg" alt="file icon" />
           {/if}
         </div>
         <div class="name">
@@ -64,12 +62,20 @@
       </div>
     {/each}
   {:else}
-    <p>Keine Dateien vorhanden</p>
+    <p class="noData" />
   {/if}
 
 </div>
 
 <style>
+  .noData {
+    box-sizing: border-box;
+    border-radius: 5px;
+    background-color: var(--light-bg);
+    padding: 10px;
+    width: 100%;
+  }
+
   .files {
     display: grid;
     grid-template-rows: 1fr;
@@ -77,12 +83,13 @@
   }
 
   .file {
+    box-sizing: border-box;
     display: grid;
     grid-template-columns: 1.5vw auto;
     grid-gap: 5px;
     border-radius: 5px;
     background-color: var(--light-bg);
-    padding: 5px 2px;
+    padding: 5px;
     width: 100%;
   }
 
@@ -108,15 +115,15 @@
 
   #folder {
     width: 20px;
+    height: 20px;
     padding: 5px;
   }
 
   button {
-    border-radius: 50px;
     cursor: pointer;
-    background-color: var(--card-bg);
-    border: 1px solid black;
-    margin: 20px 0;
+    border: none;
+    background-color: var(--light-bg);
+    margin-bottom: 20px;
   }
 
   @media screen and (max-width: 1300px) {

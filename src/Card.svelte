@@ -13,7 +13,7 @@
   export let state;
   export let desc;
   export let files;
-  export let lastCard = false
+  export let lastCard = false;
 
   let activeItem = "";
   let modalActive = false;
@@ -23,22 +23,22 @@
   let wrapper;
 
   const [send, receive] = crossfade({
-		duration: d => Math.sqrt(d * 200),
+    duration: d => Math.sqrt(d * 200),
 
-		fallback(node, params) {
-			const style = getComputedStyle(node);
-			const transform = style.transform === 'none' ? '' : style.transform;
+    fallback(node, params) {
+      const style = getComputedStyle(node);
+      const transform = style.transform === "none" ? "" : style.transform;
 
-			return {
-				duration: 600,
-				easing: quintOut,
-				css: t => `
+      return {
+        duration: 600,
+        easing: quintOut,
+        css: t => `
 					transform: ${transform} scale(${t});
 					opacity: ${t}
 				`
-			};
-		}
-	});
+      };
+    }
+  });
 
   const toggleModal = () => {
     modalActive = !modalActive;
@@ -75,7 +75,7 @@
   on:dragend={() => (spacer = false)}
   on:drop={() => (spacer = false)}>
   {#if spacer}
-    <div class="dropper"> {$activeElement.project} </div>
+    <div class="dropper">{$activeElement.project}</div>
   {/if}
   <div
     bind:this={item}
@@ -89,13 +89,13 @@
     <h3>{project}</h3>
     <div class="desription">
       Beschreibung:
-      <p>{desc}</p>
+      <p class="desc">{desc ? desc : ''}</p>
     </div>
     <p>Dateien:</p>
     <Files {files} />
   </div>
-  {#if $hoverElement.type == "column" && $hoverElement.state == state && lastCard}
-    <div class="dropper"> {$activeElement.project} </div>
+  {#if $hoverElement.type == 'column' && $hoverElement.state == state && lastCard}
+    <div class="dropper">{$activeElement.project}</div>
   {/if}
 </div>
 
@@ -119,6 +119,7 @@
   }
 
   h3 {
+    font-size: calc(10px + 0.75vw);
     margin: 0;
     margin-bottom: 20px;
     word-wrap: break-word;
@@ -128,6 +129,14 @@
     white-space: pre-wrap;
   }
 
+  .desc {
+    box-sizing: border-box;
+    border-radius: 5px;
+    background-color: var(--light-bg);
+    padding: 10px;
+    width: 100%;
+  }
+
   .dropper {
     height: 100%;
     background-color: var(--primary-text-color);
@@ -135,6 +144,6 @@
     margin: 0.5vw 1vw;
     padding: 10px;
     opacity: 0.5;
-    color: var(--button-bg)
+    color: var(--button-bg);
   }
 </style>

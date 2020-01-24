@@ -15,6 +15,7 @@
   const dialog = require("electron").remote.dialog;
   const Store = require("electron-store");
   const { shell } = require("electron");
+  const mainWindow = require("electron").remote.getCurrentWindow();
 
   let watcher;
   const store = new Store();
@@ -161,33 +162,38 @@
         }
       }
     });
-
     if (!watcher) {
       createWatcher($sessionPath);
     }
   };
 
   const selectPath = () => {
-    const folderPath = dialog.showOpenDialogSync({
+    const folderPath = dialog.showOpenDialogSync(mainWindow, {
       properties: ["openDirectory"],
-      title: "Select Path to Bestellungen",
-      buttonLabel: "Select"
+      title: "Wählen Sie den Pfad zum Ordner der Bestellungen",
+      buttonLabel: "Auswählen"
     });
 
-    //check for .ordernizer file
-    if (jetpack.dir(folderPath[0]).exists($mainFileName)) {
-      $sessionPath = folderPath[0];
-      store.set("defaultPath", $sessionPath);
-      watcher.close().then(() => {
-        watcher = false;
-        updateData($sessionPath);
-      });
-    } else {
-      alert(
-        "Der ausgewählte Ordner enthält keine Datei mit dem Namen: '" +
-          $mainFileName +
-          "'. Prüfen Sie bitte, ob sie den richtigen Ordner ausgewählt haben"
-      );
+    if (typeof folderPath !== "undefined") {
+      //check for .ordernizer file
+      if (jetpack.dir(folderPath[0]).exists($mainFileName)) {
+        $sessionPath = folderPath[0];
+        store.set("defaultPath", $sessionPath);
+        if (watcher) {
+          watcher.close().then(() => {
+            watcher = null;
+            updateData($sessionPath);
+          });
+        } else {
+          updateData($sessionPath);
+        }
+      } else {
+        alert(
+          "Der ausgewählte Ordner enthält keine Datei mit dem Namen: '" +
+            $mainFileName +
+            "'. Prüfen Sie bitte, ob sie den richtigen Ordner ausgewählt haben"
+        );
+      }
     }
   };
 
@@ -204,9 +210,14 @@
 </script>
 
 <div class="filemanager">
-  <span class="underline" on:click={openSessionFolder}>{$sessionPath}</span>
+  <span
+    class="underline"
+    on:click={openSessionFolder}
+    title="Öffnet den ausgewählten Ordner">
+    {$sessionPath}
+  </span>
   <img
-    src="../public/images/settings.svg"
+    src="../public/assets/settings.svg"
     alt="Pfad auswählen Logo"
     title="Pfad auswählen"
     on:click={selectPath}

@@ -1,5 +1,6 @@
 <script>
   const pjson = require("../package.json");
+  const { shell } = require("electron");
 
   const version = pjson.version;
   console.log("You are running Version: " + version);
@@ -43,6 +44,10 @@
     setLogo();
   };
 
+  const getHelp = () => {
+    shell.openExternal("https://github.com/kevinschweikert/Ordernizer");
+  };
+
   setTheme();
   setLogo();
 </script>
@@ -50,7 +55,7 @@
 <div class="title">
   <img src={logo} alt="Ordernizer Logo" on:click={toggleTheme} />
   <h1 on:click={toggleTheme}>ORDERNIZER</h1>
-  <span class="version">v{version}</span>
+  <span class="version" on:click={getHelp}>v{version} | Hilfe</span>
 </div>
 
 <style>
@@ -81,6 +86,7 @@
     border-radius: var(--roundness-small);
     position: fixed;
     top: calc(100vh - 30px);
-    left: calc(100vw - 55px);
+    left: calc(100vw - 110px);
+    cursor: pointer;
   }
 </style>

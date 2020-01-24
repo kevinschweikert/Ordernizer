@@ -8,7 +8,7 @@
 </script>
 
 <img
-  src="../public/images/plus-square.svg"
+  src="../public/assets/plus-square.svg"
   on:click={toggleModal}
   class="invert"
   title="Neues Projekt anlegen"

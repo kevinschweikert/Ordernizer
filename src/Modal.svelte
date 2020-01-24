@@ -43,10 +43,16 @@
   };
 </script>
 
-<div id="myModal" class="modal" on:click|preventDefault={toggle}>
+<div
+  id="myModal"
+  class="modal"
+  on:mousedown|preventDefault|stopPropagation={toggle}>
 
   <!-- Modal content -->
-  <div class="modal-content" on:click|preventDefault|stopPropagation>
+  <div
+    class="modal-content"
+    on:click|preventDefault|stopPropagation
+    on:mousedown|stopPropagation>
     <div>
       <p>Projektname</p>
       <input type="text" bind:value={project} />
@@ -54,7 +60,11 @@
 
     <div>
       <p>Beschreibung:</p>
-      <textarea name="description" id="desc" bind:value={desc} />
+      <textarea
+        name="description"
+        id="desc"
+        bind:value={desc}
+        placeholder="Gebe eine Beschreibung ein" />
     </div>
 
     <div>
