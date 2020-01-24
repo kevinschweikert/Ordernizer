@@ -1,7 +1,9 @@
 {
   "name": "ordernizer",
+  "productName": "Ordernizer",
   "description": "Application to organize the order process in a kanban/Trello style",
-  "version": "0.6.0",
+  "version": "0.6.1",
+  "license": "UNLICENSED",
   "main": "./src/electron.js",
   "author": "Kevin Schweikert <info@kevinschweikert.de> (http://kevinschweikert.de)",
   "devDependencies": {
@@ -46,20 +48,23 @@
     "productName": "Ordernizer",
     "copyright": "Copyright @ 2020 ${author}",
     "publish": "github",
+    "files": [
+      "./public/*",
+      "./public/**/*",
+      "./src/electron.js",
+      "./build/**"
+    ],
     "mac": {
       "category": "public.app-category.productivity",
       "target": "dmg",
-      "type": "distribution",
-      "icon": "./public/256x256.icns"
+      "type": "distribution"
     },
     "win": {
-      "target": "portable",
-      "icon": "./public/256x256.ico"
+      "target": "portable"
     },
     "linux": {
       "category": "public.app-category.productivity",
-      "target": "deb",
-      "icon": "./public/256x256.png"
+      "target": "deb"
     }
   }
 }
