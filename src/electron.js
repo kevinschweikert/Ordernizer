@@ -1,20 +1,22 @@
-const { app, BrowserWindow } = require("electron");
+const { app, BrowserWindow, nativeImage } = require("electron");
 const path = require("path");
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
 let watcher;
+let appIcon = null;
 
 function createWindow() {
-  const mode = process.env.NODE_ENV;
+  console.log(__dirname);
+  appIcon = nativeImage.createFromPath("public/256x256.png");
   mainWindow = new BrowserWindow({
+    minWidth: 500,
     width: 1600,
     height: 1000,
-    icon: path.join(__dirname, "../public/ordernizer_icon.png"),
+    icon: appIcon,
     title: "Ordernizer",
     autoHideMenuBar: true,
-    //titleBarStyle: 'hidden',
     webPreferences: {
       nodeIntegration: true
     }
@@ -25,7 +27,8 @@ function createWindow() {
     mainWindow = null;
   });
 
-  if (process.env.NODE_ENV === "development") {
+  if (process.env.NODE_ENV == "development") {
+    mainWindow.openDevTools();
     watcher = require("chokidar").watch(
       path.join(__dirname, "../public/bundle.js"),
       { ignoreInitial: true }
