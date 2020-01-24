@@ -56,8 +56,8 @@ Click on the Logo or Heading to toggle light and dark theme. The settig will be 
 
 ## BUGFIXES
 
-- [ ] sort order is not remembered with reload
-- [ ] no drop preview if you want to drop it in empty column area
+- [x] sort order is not remembered with reload
+- [x] no drop preview if you want to drop it in empty column area
 
 ## IDEAS
 
