@@ -10,6 +10,7 @@
   let nameWarning = false;
   let emptyWarning = false;
   let forbiddenCharacter = false;
+  const regex = "[^a-zäöüA-Z0-9_ ]"
 
   const dispatcher = createEventDispatcher();
 
@@ -23,7 +24,7 @@
   $: project == ""
     ? (emptyWarning = true)
     : (emptyWarning = false);
-  $: project.match("[^a-zäöüA-Z0-9_s]")
+  $: project.match(regex)
     ? (forbiddenCharacter = true)
     : (forbiddenCharacter = false);
 
@@ -83,7 +84,7 @@
     </p>
     <div>
       <button on:click={toggle}>Abbrechen</button>
-      <button on:click={save} id="save">Speichern</button>
+      <button on:click={save} id="save" disabled={(nameWarning || emptyWarning || forbiddenCharacter)}>Speichern</button>
     </div>
 
   </div>
@@ -147,5 +148,10 @@
   button {
     background-color: var(--light-bg);
     border: none;
+  }
+
+  #save:disabled{
+    background-color: var(--light-bg);
+    color: #ff000055;
   }
 </style>
