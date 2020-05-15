@@ -1,5 +1,7 @@
 # Ordernizer
 
+![Build/release](https://github.com/kevinschweikert/Ordernizer/workflows/Build/release/badge.svg)
+
 ![Ordernizer Logo](./public/256x256.png)
 
 This is an app that helps to keep track of our orders at university

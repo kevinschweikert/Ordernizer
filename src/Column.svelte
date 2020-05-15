@@ -13,7 +13,7 @@
   let items = [];
   let newProjectName = "";
   let lastID;
-
+  
   if (!Array.prototype.last) {
     Array.prototype.last = function() {
       return this[this.length - 1];
@@ -21,7 +21,7 @@
   }
   if (!Array.prototype.sortByArray) {
     Array.prototype.sortByArray = function(keyArray) {
-      if (typeof this !== "undefined") {
+      if (typeof this !== "undefined" && this.length > 1 && keyArray.length > 1) {
         let array = [];
         keyArray.forEach(key => {
           if (this.some(item => item.id == key)) {
