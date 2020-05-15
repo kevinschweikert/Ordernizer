@@ -59,7 +59,7 @@
     watcher = chokidar.watch(watchPath, {
       ignoreInitial: true,
       ignored: /(^|[\/\\])\../, // ignore dotfiles
-      depth: 2
+      depth: 1
     });
     watcher
       .on("change", changePath => {
@@ -92,7 +92,7 @@
         }
       })
       .on("unlink", changePath => {
-        if (path.basename(changePath) == $cfgFileName) {
+        /* if (path.basename(changePath) == $cfgFileName) {
           updateData($sessionPath);
         } else {
           const dirPath = path.dirname(changePath);
@@ -106,7 +106,8 @@
               conf.path == dirName ? tempConf : conf
             );
           }
-        }
+        } */
+        updateData($sessionPath)
       })
       .on("addDir", changePath => {
         setTimeout(() => {
@@ -162,6 +163,11 @@
         
         if (config.path !== folder.name) {
           config.path = folder.name;
+          writeChanges = true
+        }
+
+        if(config.files.length !== files.length ) {
+          config.files = files
           writeChanges = true
         }
 

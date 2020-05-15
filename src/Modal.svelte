@@ -142,4 +142,12 @@
     background-color: green;
     color: var(--light);
   }
+
+  @media (max-width: 1000px) {
+    .buttons {
+      grid-auto-rows: auto;
+      grid-auto-flow: row;
+      grid-gap: 10px;
+    }
+  }
 </style>

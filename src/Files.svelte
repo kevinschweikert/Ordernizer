@@ -45,7 +45,7 @@
       <div class="file">
         <div class="format">
           {#if data.format.localeCompare('jpg') == 0 || data.format.localeCompare('png') == 0}
-            <img src="../public/assets/image.svg" alt="picture icon" />
+            <img src="../public/assets/image.svg" alt="imageformat icon" />
           {:else if data.format.localeCompare('pdf') == 0}
             <img src="../public/assets/pdf.svg" alt="pdf icon" />
           {:else}
