@@ -60,6 +60,7 @@
     if (storedKeys != null) {
       return storedKeys;
     } else {
+      localStorage.setItem(state, JSON.stringify([]))
       return [];
     }
   };
@@ -91,12 +92,17 @@
         insertIntoSortingArray($hoverElement.id, $activeElement);
       }
     }
+    
+    if($activeElement.state !== state){
+      $activeElement.state = state;
+      jetpack
+        .dir($sessionPath)
+        .dir($activeElement.path)
+        .write($cfgFileName, $activeElement);
+    } else {
+      $configs = [...$configs]
+    }
 
-    $activeElement.state = state;
-    jetpack
-      .dir($sessionPath)
-      .dir($activeElement.path)
-      .write($cfgFileName, $activeElement);
 
     $hoverElement = { state: null, type: null, id: null };
   };
@@ -105,6 +111,7 @@
     items = $configs
       .filter(config => config.state == state)
       .sortByArray(getOrdering(state));
+    localStorage.setItem(state, JSON.stringify(items.map(item => item = item.id)))
   }
 </script>
 

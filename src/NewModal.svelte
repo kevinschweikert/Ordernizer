@@ -9,20 +9,18 @@
 
   let nameWarning = false;
   let emptyWarning = false;
-  let submitClicked = false;
   let forbiddenCharacter = false;
 
   const dispatcher = createEventDispatcher();
 
   const toggle = e => {
-    console.log(e);
     dispatcher("toggle");
   };
 
   $: $configs.map(config => config.project).some(name => name == project)
     ? (nameWarning = true)
     : (nameWarning = false);
-  $: project == "" && submitClicked
+  $: project == ""
     ? (emptyWarning = true)
     : (emptyWarning = false);
   $: project.match("[^a-zäöüA-Z0-9_s]")
@@ -30,7 +28,6 @@
     : (forbiddenCharacter = false);
 
   const save = () => {
-    submitClicked = true;
     if (!nameWarning && !emptyWarning && !forbiddenCharacter) {
       const config = createConfig(
         project,
@@ -43,7 +40,6 @@
         .dir(project.replace(/\s/g, "_"))
         .write($cfgFileName, config);
       toggle();
-      submitClicked = false;
     }
   };
 </script>

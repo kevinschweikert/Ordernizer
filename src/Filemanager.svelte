@@ -9,6 +9,9 @@
   import { onDestroy } from "svelte";
   import ConfigModal from "./ConfigModal.svelte";
 
+  var realFs = require('fs')
+  var gracefulFs = require('graceful-fs')
+  gracefulFs.gracefulify(realFs)
   const chokidar = require("chokidar");
   const jetpack = require("fs-jetpack");
   const path = require("path");
@@ -69,9 +72,12 @@
       })
       .on("add", changePath => {
         if (jetpack.inspect(changePath).name == $cfgFileName) {
-          const added = jetpack.read(changePath, "json");
-          console.log("Added:" + added.project);
+          /* const added = jetpack.read(changePath, "json");
           $configs = [...$configs, added];
+          if(pathsToCreate.length > 0){
+            pathsToCreate = pathsToCreate.filter(pathItem => pathItem !== path.dirname(changePath))
+          } */
+          updateData($sessionPath)
         } else {
           const dirPath = path.dirname(changePath);
           const dirName = path.basename(dirPath);
@@ -86,26 +92,28 @@
         }
       })
       .on("unlink", changePath => {
-        console.log("unlink");
         if (path.basename(changePath) == $cfgFileName) {
           updateData($sessionPath);
         } else {
           const dirPath = path.dirname(changePath);
           const dirName = path.basename(dirPath);
-          const files = jetpack
-            .list(dirPath)
-            .filter(file => file !== $cfgFileName);
-          const tempConf = $configs.filter(conf => conf.path == dirName)[0];
-          tempConf.files = files;
-          $configs = $configs.map(conf =>
-            conf.path == dirName ? tempConf : conf
-          );
+          let files = jetpack.list(dirPath)
+          if(typeof files !== "undefined"){
+            files = files.filter(file => file !== $cfgFileName);
+            const tempConf = $configs.filter(conf => conf.path == dirName)[0];
+            tempConf.files = files;
+            $configs = $configs.map(conf =>
+              conf.path == dirName ? tempConf : conf
+            );
+          }
         }
       })
       .on("addDir", changePath => {
-        if (!jetpack.dir(changePath).exists($cfgFileName)) {
-          updateData($sessionPath);
-        }
+        setTimeout(() => {
+          if (!jetpack.dir(changePath).exists($cfgFileName)) {
+            updateData($sessionPath);
+          }
+        }, 5000);
       })
       .on("unlinkDir", changePath => updateData($sessionPath))
       .on("error", error => console.error(error));
@@ -115,6 +123,8 @@
 
   const updateData = folderPath => {
     $configs = [];
+    pathsToCreate = [];
+    modalActive = false;
 
     //Get all Folders and Contents
     const folderCont = jetpack
@@ -132,7 +142,9 @@
           .dir(folderPath)
           .dir(folder.name)
           .read($cfgFileName, "json");
-        config.files = jetpack
+
+        //check for new files
+        const files = jetpack
           .dir(folderPath)
           .dir(folder.name)
           .list()
@@ -145,11 +157,26 @@
                 .exists(file) == "file"
           )
           .filter(file => file.charAt(0) != ".");
-        config.path = folder.name;
-        jetpack
-          .dir(folderPath)
-          .dir(folder.name)
-          .write($cfgFileName, config);
+        
+        let writeChanges = false;
+        
+        if (config.path !== folder.name) {
+          config.path = folder.name;
+          writeChanges = true
+        }
+
+        files.forEach(file => {
+        if(!config.files.some(cfile => cfile == file)) {
+          writeChanges  = true
+        }})
+
+        if(writeChanges) {
+          config.files = files
+          jetpack
+            .dir(folderPath)
+            .dir(folder.name)
+            .write($cfgFileName, config);
+        }
         $configs = [...$configs, config];
       } else {
         modalActive = true;
@@ -177,6 +204,10 @@
     if (typeof folderPath !== "undefined") {
       //check for .ordernizer file
       if (jetpack.dir(folderPath[0]).exists($mainFileName)) {
+        if($sessionPath !== folderPath[0]){
+          localStorage.clear()
+          location.reload()
+        }
         $sessionPath = folderPath[0];
         store.set("defaultPath", $sessionPath);
         if (watcher) {
