@@ -37,8 +37,8 @@
       .dir("..")
       .dir("Archive")
       .dir(year)
-      .dir([year, month, path].join("_"));
-    jetpack.dir($sessionPath).copy(path, archiveFolderPath.cwd());
+      .dir([year, month, path, id].join("_"));
+    jetpack.dir($sessionPath).copy(path, archiveFolderPath.cwd(), {overwrite: true});
     jetpack.dir($sessionPath).remove(path);
     toggle();
   };

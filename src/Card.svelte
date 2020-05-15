@@ -135,6 +135,8 @@
     background-color: var(--light-bg);
     padding: 10px;
     width: 100%;
+    word-break: break-all;
+    overflow: hidden;
   }
 
   .dropper {
