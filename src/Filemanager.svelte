@@ -59,7 +59,9 @@
     watcher = chokidar.watch(watchPath, {
       ignoreInitial: true,
       ignored: /(^|[\/\\])\../, // ignore dotfiles
-      depth: 1
+      depth: 1,
+      usePolling: true,
+      interval: 5000
     });
     watcher
       .on("change", changePath => {
