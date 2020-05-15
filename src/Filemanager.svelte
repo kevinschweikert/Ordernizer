@@ -61,7 +61,7 @@
       ignored: /(^|[\/\\])\../, // ignore dotfiles
       depth: 1,
       usePolling: true,
-      interval: 5000
+      interval: 500
     });
     watcher
       .on("change", changePath => {
